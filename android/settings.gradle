@@ -1,0 +1,3 @@
+rootProject.name = 'DietaViverSaudavel'
+
+include ':app'
