@@ -1,48 +1,27 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-import React, { Component } from 'react';
+import React from 'react';
 import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View
+    AppRegistry
 } from 'react-native';
+import {
+    StackNavigator
+} from 'react-navigation';
+import TelaLogin from './src/telas/login/TelaLogin';
+import TelaRegistro from './src/telas/login/TelaRegistro';
+import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
+import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
 
-export default class DietaViverSaudavel extends Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                        Welcome to React Native!
-                </Text>
-                <Text style={styles.instructions}>
-                    App Dieta Vida Saudável
-                </Text>
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+const DietaViverSaudavel = StackNavigator({
+    Login: {
+        screen: TelaLogin
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
+    Registro: {
+        screen: TelaRegistro
     },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+    RecuperarSenha: {
+        screen: TelaRecuperarSenha
+    },
+    Alimentacao: {
+        screen: TelaAlimentacao
     },
 });
 
