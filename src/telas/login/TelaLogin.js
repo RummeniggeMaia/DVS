@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, Button, Link, TouchableHighlight, TextInput} from 'react-native';
-import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
+import styles from 'DietaViverSaudavel/src/styles/Boxes_style';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 export default class TelaLogin extends React.Component {
     constructor(props) {
@@ -15,11 +16,11 @@ export default class TelaLogin extends React.Component {
 
     render() {
         return (
-            <View style={ styles.container }>
 
+            <View style={ styles.container }>
                 <View style={styles.box1}>
                   <Text style={styles.welcome}>
-                      App Dieta Vida Saudável
+                      (LOGO) App Dieta Viver Saudável
                   </Text>
                 </View>
                 <View style={styles.box2}>
@@ -41,16 +42,18 @@ export default class TelaLogin extends React.Component {
                             placeholder={this.state.textPassword}
                             autoCorrect={true}
                           />
-                    <View style={styles.viewbuttonsLoginPage}>
-                        <Button
-                           onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                           title = "Login" / >
-                    </View>
-                    <View style={styles.viewbuttonsRegisterPage}>
-                        < Button
-                            onPress = { () => this.props.navigation.navigate('Registro') }
-                            title = "Registrar-se" / >
-                    </View>
+                    <Button
+                        onPress = { () => this.props.navigation.navigate('Alimentacao') }
+                        title = "Login"
+                        color = "#5497FF"/ >
+                    <Button
+                        onPress = { () => this.props.navigation.navigate('Alimentacao') }
+                        title = "Facebook"
+                        color = "#3b5998"/ >
+                    <Text style={{color: 'blue'}}
+                        onPress={() => this.props.navigation.navigate('Registro') }>
+                        Registrar-se
+                    </Text>
                     <Text style={{color: 'blue'}}
                         onPress={() => this.props.navigation.navigate('RecuperarSenha') }>
                         Esqueceu a senha?

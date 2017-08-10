@@ -23,6 +23,13 @@ const DietaViverSaudavel = StackNavigator({
     Alimentacao: {
         screen: TelaAlimentacao
     },
+}, {
+    navigationOptions: {
+        headerTintColor: 'white',
+        headerStyle: {
+            backgroundColor: '#00C853'
+        }
+    },
 });
 
 AppRegistry.registerComponent('DietaViverSaudavel', () => DietaViverSaudavel);
