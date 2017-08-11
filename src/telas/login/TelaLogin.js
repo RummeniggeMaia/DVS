@@ -1,9 +1,17 @@
 import React from 'react';
-import { Text, View, Button, Link, TouchableHighlight, TextInput} from 'react-native';
-import styles from 'DietaViverSaudavel/src/styles/Boxes_style';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import { ScrollView, View, StatusBar } from 'react-native';
+import {
+    FormLabel,
+    FormInput,
+    Button,
+    Icon,
+    SocialIcon,
+    Text
+} from 'react-native-elements';
+import styles from 'DietaViverSaudavel/src/styles/Styles';
 
 export default class TelaLogin extends React.Component {
+
     constructor(props) {
       super(props);
       this.state = { textLogin: 'Insira seu login.',
@@ -16,50 +24,39 @@ export default class TelaLogin extends React.Component {
 
     render() {
         return (
+            <ScrollView
+                style = {{backgroundColor: '#D5FFD5'}}
+                showsVerticalScrollIndicator = {true}>
 
-            <View style={ styles.container }>
-                <View style={styles.box1}>
-                  <Text style={styles.welcome}>
+                <StatusBar backgroundColor="#00A043" barStyle="light-content" />
+
+                <View style={styles.logo}>
+                  <Text>
                       (LOGO) App Dieta Viver Saudável
                   </Text>
                 </View>
-                <View style={styles.box2}>
-                    <Text style={styles.textViewOverButton}>
-                        Login:
-                    </Text>
-                    <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                            autoCapitalize="none"
-                            placeholder={this.state.textLogin}
-                            autoCorrect={true}
-                          />
-                    <Text style={styles.textViewOverButton}>
-                      Senha:
-                    </Text>
-                    <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                            autoCapitalize="none"
-                            placeholder={this.state.textPassword}
-                            autoCorrect={true}
-                          />
+
+                <View>
+                    <FormLabel>Login:</FormLabel>
+                    <FormInput style = {{ flex: 1 }} />
+                    <FormLabel>Senha:</FormLabel>
+                    <FormInput style = {{ flex: 1 }} />
                     <Button
                         onPress = { () => this.props.navigation.navigate('Alimentacao') }
                         title = "Login"
-                        color = "#5497FF"/ >
-                    <Button
-                        onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                        title = "Facebook"
-                        color = "#3b5998"/ >
-                    <Text style={{color: 'blue'}}
-                        onPress={() => this.props.navigation.navigate('Registro') }>
+                        backgroundColor = "#5497FF"/>
+                    <SocialIcon
+                        title='Facebook'
+                        button
+                        type='facebook' />
+                    <Text style={ styles.link }>
                         Registrar-se
                     </Text>
-                    <Text style={{color: 'blue'}}
-                        onPress={() => this.props.navigation.navigate('RecuperarSenha') }>
+                    <Text style={ styles.link }>
                         Esqueceu a senha?
                     </Text>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }

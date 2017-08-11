@@ -2,19 +2,17 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: '#D5FFD5',
+    },
+    link: {
+        color:'blue',
+        paddingLeft:15
+    }, logo: {
+        flex: 0.2,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 30,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+        backgroundColor: '#5497FF',
+        padding: 30
     },
 });

@@ -17,13 +17,16 @@ export default StyleSheet.create({
         textAlign: 'center',
         margin: 10,
     },
-    instructions: {
-        textAlign: 'left',
-        color: '#333333',
-        marginBottom: 2,
-        paddingTop: 5,
-        paddingBottom: 0,
-        paddingLeft: 5
+    facebook_button: {
+        backgroundColor: '#3b5998',
+        marginTop: 5,
+        padding: 10,
+    },
+    facebook_button_label: {
+        textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+        fontFamily: 'Klavika Bold',
     },
     textViewOverButton: {
         textAlign: 'left',
@@ -48,5 +51,5 @@ export default StyleSheet.create({
     box3: {
         flex: 1,
         backgroundColor: '#ffffff'
-    },
+    }
 });
