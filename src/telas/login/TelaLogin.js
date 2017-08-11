@@ -39,6 +39,7 @@ export default class TelaLogin extends React.Component {
                     <TextInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                             autoCapitalize="none"
+                            secureTextEntry={true}
                             placeholder={this.state.textPassword}
                             autoCorrect={true}
                           />
@@ -46,6 +47,7 @@ export default class TelaLogin extends React.Component {
                         onPress = { () => this.props.navigation.navigate('Alimentacao') }
                         title = "Login"
                         color = "#5497FF"/ >
+                    <View style={styles.line}></View>
                     <Button
                         onPress = { () => this.props.navigation.navigate('Alimentacao') }
                         title = "Facebook"
@@ -55,7 +57,7 @@ export default class TelaLogin extends React.Component {
                         Registrar-se
                     </Text>
                     <Text style={{color: 'blue'}}
-                        onPress={() => this.props.navigation.navigate('RecuperarSenha') }>
+                        onPress={() => this.props.navigation.navigate('DadosPessoais') }>
                         Esqueceu a senha?
                     </Text>
                 </View>

@@ -17,6 +17,11 @@ export default StyleSheet.create({
         textAlign: 'center',
         margin: 10,
     },
+    instructionsCenter: {
+      textAlign: 'center',
+      color: '#000000',
+      paddingBottom: 5
+    },
     instructions: {
         textAlign: 'left',
         color: '#333333',
@@ -30,6 +35,9 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: '#333333',
         marginLeft: 6,
+    },
+    line: {
+      paddingBottom: 10,
     },
     //cabecalho
     box1: {
