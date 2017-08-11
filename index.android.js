@@ -9,6 +9,8 @@ import TelaLogin from './src/telas/login/TelaLogin';
 // import TelaRegistro from './src/telas/login/TelaRegistro';
 // import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
 // import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
+//import TelaDadosPessoais from './src/telas/login/TelaDadosPessoais';
+//import TelaDadosDaConta from './src/telas/login/TelaDadosDaConta';
 
 const DietaViverSaudavel = StackNavigator({
     Login: {
@@ -23,6 +25,12 @@ const DietaViverSaudavel = StackNavigator({
     // Alimentacao: {
     //     screen: TelaAlimentacao
     // },
+//    DadosPessoais: {
+//            screen: TelaDadosPessoais
+//    },
+//    DadosDaConta: {
+//        screen: TelaDadosDaConta
+//    },
 }, {
     navigationOptions: {
         headerTintColor: 'white',

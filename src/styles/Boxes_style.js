@@ -28,11 +28,27 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'Klavika Bold',
     },
+    instructionsCenter: {
+      textAlign: 'center',
+      color: '#000000',
+      paddingBottom: 5
+    },
+    instructions: {
+        textAlign: 'left',
+        color: '#333333',
+        marginBottom: 2,
+        paddingTop: 5,
+        paddingBottom: 0,
+        paddingLeft: 5
+    },
     textViewOverButton: {
         textAlign: 'left',
         fontWeight: 'bold',
         color: '#333333',
         marginLeft: 6,
+    },
+    line: {
+      paddingBottom: 10,
     },
     //cabecalho
     box1: {

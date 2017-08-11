@@ -62,7 +62,7 @@ export default class TelaRegistro extends React.Component {
                     <View style={styles.viewbuttonsLoginPage}>
                         <Button
                            onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                           title = "Registrar" / >
+                           title = "Registrar-se" / >
                     </View>
                 </View>
 

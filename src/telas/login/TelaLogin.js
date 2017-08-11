@@ -35,12 +35,18 @@ export default class TelaLogin extends React.Component {
                       (LOGO) App Dieta Viver Saudável
                   </Text>
                 </View>
-
                 <View>
                     <FormLabel>Login:</FormLabel>
-                    <FormInput style = {{ flex: 1 }} />
+                    <FormInput
+                        style = {{ flex: 1, height: 40, borderColor: 'gray', borderWidth: 0 }}
+                        autoCapitalize="none"
+                        placeholder={this.state.textLogin}
+                        autoCorrect={true} />
                     <FormLabel>Senha:</FormLabel>
-                    <FormInput style = {{ flex: 1 }} />
+                    <FormInput
+                        autoCapitalize="none"
+                        secureTextEntry={true}
+                        placeholder={this.state.textPassword} />
                     <Button
                         onPress = { () => this.props.navigation.navigate('Alimentacao') }
                         title = "Login"
