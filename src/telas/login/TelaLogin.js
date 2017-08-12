@@ -41,9 +41,10 @@ export default class TelaLogin extends React.Component {
                         style = {{ flex: 1, height: 40, borderColor: 'gray', borderWidth: 0 }}
                         autoCapitalize="none"
                         placeholder={this.state.textLogin}
-                        autoCorrect={true} />
+                         />
                     <FormLabel>Senha:</FormLabel>
                     <FormInput
+                    style = {{ flex: 1, height: 40, borderColor: 'gray', borderWidth: 0}}
                         autoCapitalize="none"
                         secureTextEntry={true}
                         placeholder={this.state.textPassword} />

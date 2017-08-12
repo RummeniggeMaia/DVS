@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, TextInput, Button, View} from 'react-native';
+import { ScrollView, View, StatusBar } from 'react-native';
+import {
+  FormLabel,
+  FormInput,
+  Button,
+  Icon,
+  Text
+} from 'react-native-elements';
 import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
 
 export default class TelaRegistro extends React.Component {
@@ -17,57 +24,58 @@ export default class TelaRegistro extends React.Component {
     };
     render() {
         return (
-            <View style={styles.container}>
+          <ScrollView
+              style = {{backgroundColor: '#D5FFD5'}}
+              showsVerticalScrollIndicator = {true}>
 
+              <StatusBar backgroundColor="#00A043" barStyle="light-content" />
 
-                <View style={styles.box2}>
-                    <Text style={styles.textViewOverButton}>
+              <View>
+
+                    <FormLabel>
                         Nome:
-                    </Text>
-                    <TextInput
+                    </FormLabel>
+                    <FormInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                             autoCapitalize="none"
                             placeholder={this.state.textNome}
                             autoCorrect={true}
                           />
-                    <Text style={styles.textViewOverButton}>
+                    <FormLabel>
                       Email:
-                    </Text>
-                    <TextInput
+                    </FormLabel>
+                    <FormInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                             autoCapitalize="none"
                             placeholder={this.state.textEmail}
                             autoCorrect={true}
                           />
-                    <Text style={styles.textViewOverButton}>
+                    <FormLabel>
                         Senha:
-                    </Text>
-                    <TextInput
+                    </FormLabel>
+                    <FormInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                             autoCapitalize="none"
                             secureTextEntry={true}
                             placeholder={this.state.textSenha}
                             autoCorrect={true}
                           />
-                    <Text style={styles.textViewOverButton}>
+                    <FormLabel>
                       Confirmar Senha:
-                    </Text>
-                    <TextInput
+                    </FormLabel>
+                    <FormInput
                             style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                             autoCapitalize="none"
                             secureTextEntry={true}
                             placeholder={this.state.textConfirmeSenha}
                             autoCorrect={true}
                           />
-                    <View style={styles.viewbuttonsLoginPage}>
-                        <Button
-                           onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                           title = "Registrar-se" / >
-                    </View>
-                </View>
-
-
-            </View>
+                    <Button
+                       onPress = { () => this.props.navigation.navigate('Alimentacao') }
+                       title = "Registrar-se"
+                       backgroundColor = "#5497FF"/ >
+              </View>
+            </ScrollView>
         );
     }
 }

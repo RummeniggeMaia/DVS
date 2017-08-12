@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, View, TextInput, Button} from 'react-native';
+import { ScrollView, View, StatusBar } from 'react-native';
+import {
+  FormLabel,
+  FormInput,
+  Button,
+  Icon,
+  Text
+} from 'react-native-elements';
 import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
 import DatePicker from 'react-native-datepicker'
 
@@ -16,15 +23,20 @@ export default class TelaDadosPessoais extends React.Component {
     };
     render() {
         return (
-            <View style={styles.container}>
-            <View style={styles.box2}>
-              <Text style={styles.instructionsCenter}>
+          <ScrollView
+              style = {{backgroundColor: '#D5FFD5'}}
+              showsVerticalScrollIndicator = {true}>
+
+              <StatusBar backgroundColor="#00A043" barStyle="light-content" />
+
+              <View>
+              <FormLabel>
                   Antes de continuar preencha os dados:
-              </Text>
+              </FormLabel>
               <View style={styles.line}></View>
-              <Text style={styles.textViewOverButton}>
+              <FormLabel>
                 Nascimento:
-              </Text>
+              </FormLabel>
               <DatePicker
                   style={{width: 200}}
                   date={this.state.date}
@@ -40,27 +52,27 @@ export default class TelaDadosPessoais extends React.Component {
                       position: 'absolute',
                       left: 0,
                       top: 4,
-                      marginLeft: 0
+                      marginLeft: 15
                     },
                     dateInput: {
-                      marginLeft: 36
+                      marginLeft: 56
                     }
                     // ... You can check the source to find the other keys.
                   }}
                   onDateChange={(date) => {this.setState({date: date})}}
                 />
-              <Text style={styles.textViewOverButton}>
+              <FormLabel>
                 Altura:
-              </Text>
-              <TextInput
+              </FormLabel>
+              <FormInput
                       style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                       autoCapitalize="none"
                       placeholder={this.state.textHeight}
                     />
-              <Text style={styles.textViewOverButton}>
+              <FormLabel>
                 Peso:
-              </Text>
-              <TextInput
+              </FormLabel>
+              <FormInput
                       style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                       autoCapitalize="none"
                       placeholder={this.state.textWeight}
@@ -68,9 +80,9 @@ export default class TelaDadosPessoais extends React.Component {
               <Button
                   onPress = { () => this.props.navigation.navigate('Alimentacao') }
                   title = "Prosseguir"
-                  color = "#5497FF"/ >
-             </View>
+                  backgroundColor = "#5497FF"/ >
             </View>
+            </ScrollView>
         );
     }
 }

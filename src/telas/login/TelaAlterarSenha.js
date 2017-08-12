@@ -9,15 +9,16 @@ import {
 } from 'react-native-elements';
 import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
 
-export default class TelaDadosDaConta extends React.Component {
+export default class TelaAlterarSenha extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { textNome: 'Insira o seu nome.',
-                   textEmail: 'Insira o seu e-mail.'
+    this.state = { textSenhaAtual: 'Insira sua senha atual.',
+                   textRepetirSenha: 'Repita sua senha.',
+                   textNovaSenha: 'Insira sua nova senha.'
                  };
   }
     static navigationOptions = {
-        title: 'Dados da Conta',
+        title: 'Alterar Senha',
     };
     render() {
         return (
@@ -26,24 +27,33 @@ export default class TelaDadosDaConta extends React.Component {
               showsVerticalScrollIndicator = {true}>
 
               <StatusBar backgroundColor="#00A043" barStyle="light-content" />
-
-                  <View>
-
+                <View>
                   <FormLabel>
-                    Nome:
+                    Senha Atual:
                   </FormLabel>
                   <FormInput
                           style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                           autoCapitalize="none"
-                          placeholder={this.state.textNome}
+                          secureTextEntry={true}
+                          placeholder={this.state.textSenhaAtual}
                         />
                   <FormLabel>
-                    E-mail:
+                    Nova Senha:
                   </FormLabel>
                   <FormInput
                           style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                           autoCapitalize="none"
-                          placeholder={this.state.textEmail}
+                          secureTextEntry={true}
+                          placeholder={this.state.textNovaSenha}
+                        />
+                  <FormLabel>
+                    Repetir Senha:
+                  </FormLabel>
+                  <FormInput
+                          style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                          autoCapitalize="none"
+                          secureTextEntry={true}
+                          placeholder={this.state.textRepetirSenha}
                         />
                   <Button
                       onPress = { () => this.props.navigation.navigate('Alimentacao') }
@@ -53,9 +63,9 @@ export default class TelaDadosDaConta extends React.Component {
                   <Button
                       onPress = { () => this.props.navigation.navigate('Alimentacao') }
                       title = "Mudar Senha"
-                      backgroundColor = "#5497FF"/>
+                      backgroundColor = "#5497FF"/ >
             </View>
-            </ScrollView>
+          </ScrollView>
         );
     }
 }
