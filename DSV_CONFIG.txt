@@ -1,0 +1,41 @@
+Dieta Viver Saudavel - App
+==========================
+* Android 6.0 (Marshmallow)
+- Google APIs
+- Android SDK Platform 23
+- Intel x86 Atom_64 System Image
+- Google APIs Intel x86 Atom_64 System Image
+
+$ANDROID_HOME = ~\AppData\Local\Android\Sdk
+$PATH = ANDROID_HOME$\tools\
+$PATH = ANDROID_HOME$\plataform-tools\
+DEBBUGER = npm install -g react-devtools
+-------------------------------------------------
+* Após clone: 
+- npm install -g react-native-cli
+- npm install
+- npm install --save react-navigation
+- npm i react-native-vector-icons --save && react-native link react-native-vector-icons
+- npm i react-native-elements --save
+- npm install react-native-datepicker --save
+- npm install hash.js --save
+React Native SnackBar
+
+=======================
+Banco de dados:
+- name: dvs_db
+- user: dvs_user
+- pass: FUjnCKXHvdzvm2Tr
+
+
+
+
+
+
+
+-------------------------------------------------
+>>> ERRO - unable to load script from assets index.android.bundle
+mkdir android/app/src/main/assets
+react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+react-native run-android
+<<<

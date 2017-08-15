@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TextInput, Button} from 'react-native';
 import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
 
 export default class TelaDadosPessoais extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export default class TelaDadosPessoais extends React.Component {
                 Nascimento:
               </Text>
               <DatePicker
-                  style={{width: 200}}
+                  style={{width: 200 }}
                   date={this.state.date}
                   mode="date"
                   placeholder="selecione"
@@ -45,7 +45,6 @@ export default class TelaDadosPessoais extends React.Component {
                     dateInput: {
                       marginLeft: 36
                     }
-                    // ... You can check the source to find the other keys.
                   }}
                   onDateChange={(date) => {this.setState({date: date})}}
                 />
@@ -67,7 +66,7 @@ export default class TelaDadosPessoais extends React.Component {
                     />
               <Button
                   onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                  title = "Prosseguir"
+                  title = "Salvar dados"
                   color = "#5497FF"/ >
              </View>
             </View>
