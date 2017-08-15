@@ -1,75 +1,90 @@
 import React from 'react';
-import { Text, View, TextInput, Button} from 'react-native';
-import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
+import {
+    ScrollView,
+    View,
+    StatusBar
+} from 'react-native';
+import {
+  FormLabel,
+  FormInput,
+  Button,
+  Icon,
+  Text
+} from 'react-native-elements';
+import styles from 'DietaViverSaudavel/src/styles/Style.js';
 import DatePicker from 'react-native-datepicker';
 
 export default class TelaDadosPessoais extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { textHeight: 'Insira a sua altura.',
-                   textWeight: 'Insira o seu peso.',
-                   date:"31/01/1991"
-                 };
-  }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nascimento: "",
+            peso: "",
+            altura: "",
+            carregou: true,
+        };
+    }
     static navigationOptions = {
         title: 'Dados Pessoais',
     };
+
     render() {
         return (
-            <View style={styles.container}>
-            <View style={styles.box2}>
-              <Text style={styles.instructionsCenter}>
-                  Antes de continuar preencha os dados:
-              </Text>
-              <View style={styles.line}></View>
-              <Text style={styles.textViewOverButton}>
-                Nascimento:
-              </Text>
-              <DatePicker
-                  style={{width: 200 }}
-                  date={this.state.date}
-                  mode="date"
-                  placeholder="selecione"
-                  format="DD/MM/YYYY"
-                  minDate="1900-01-01"
-                  maxDate="2017-10-08"
-                  confirmBtnText="Confirmar"
-                  cancelBtnText="Cancelar"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      marginLeft: 36
-                    }
-                  }}
-                  onDateChange={(date) => {this.setState({date: date})}}
-                />
-              <Text style={styles.textViewOverButton}>
-                Altura:
-              </Text>
-              <TextInput
-                      style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                      autoCapitalize="none"
-                      placeholder={this.state.textHeight}
-                    />
-              <Text style={styles.textViewOverButton}>
-                Peso:
-              </Text>
-              <TextInput
-                      style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                      autoCapitalize="none"
-                      placeholder={this.state.textWeight}
-                    />
-              <Button
-                  onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                  title = "Salvar dados"
-                  color = "#5497FF"/ >
-             </View>
-            </View>
+            <ScrollView
+                style = {styles.scrollview}
+                showsVerticalScrollIndicator = {true}>
+
+                <View>
+                    <FormLabel>
+                        Antes de continuar preencha os dados:
+                    </FormLabel>
+                    <View style={styles.line}></View>
+                    <FormLabel>
+                        Nascimento:
+                    </FormLabel>
+                    <DatePicker
+                        style={{width: 200 }}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="selecione"
+                        format="DD/MM/YYYY"
+                        minDate="1900-01-01"
+                        maxDate="2017-10-08"
+                        confirmBtnText="Confirmar"
+                        cancelBtnText="Cancelar"
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 15
+                            },
+                            dateInput: {
+                                marginLeft: 56
+                            }
+                        }}
+                        onDateChange={(date) => {this.setState({date: date})}} />
+                    <FormLabel>
+                        Altura:
+                    </FormLabel>
+                    <FormInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                            autoCapitalize="none"
+                            placeholder={this.state.textHeight} />
+                    <FormLabel>
+                    Peso:
+                    </FormLabel>
+                    <FormInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                        autoCapitalize="none"
+                        placeholder={this.state.textWeight} />
+                    <Button
+                        title = "Salvar dados"
+                        color = {styles.button} />
+                    </View>
+                </View>
+            </ScrollView>
         );
     }
 }

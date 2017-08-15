@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, View, TextInput, Button} from 'react-native';
+import { ScrollView, View, StatusBar } from 'react-native';
+import {
+  FormLabel,
+  FormInput,
+  Button,
+  Icon,
+  Text
+} from 'react-native-elements';
 import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
 
 export default class TelaRecuperarSenha extends React.Component {
@@ -13,27 +20,32 @@ export default class TelaRecuperarSenha extends React.Component {
     };
     render() {
         return (
-            <View style={styles.container}>
-              <View style={styles.box2}>
-                <Text style={styles.instructionsCenter}>
-                    Insira o teu e-mail para recuperar a senha da sua conta.
-                </Text>
-                <View style={styles.line}></View>
-                <Text style={styles.textViewOverButton}>
-                  E-mail:
-                </Text>
-                <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                        autoCapitalize="none"
-                        placeholder={this.state.email}
-                        autoCorrect={true}
-                      />
+          <ScrollView
+              style = {{backgroundColor: '#D5FFD5'}}
+              showsVerticalScrollIndicator = {true}>
+
+              <StatusBar backgroundColor="#00A043" barStyle="light-content" />
+
+                  <View>
+                      <FormLabel>
+                          Insira o teu e-mail para recuperar a senha da sua conta.
+                      </FormLabel>
+                      <View style={styles.line}></View>
+                      <FormLabel>
+                        E-mail:
+                      </FormLabel>
+                      <FormInput
+                              style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                              autoCapitalize="none"
+                              placeholder={this.state.email}
+                              autoCorrect={true}
+                            />
                       <Button
                           onPress = { () => this.props.navigation.navigate('Alimentacao') }
                           title = "Enviar"
-                          color = "#5497FF"/ >
-                </View>
-            </View>
+                          backgroundColor = "#5497FF"/ >
+                  </View>
+              </ScrollView>
         );
     }
 }

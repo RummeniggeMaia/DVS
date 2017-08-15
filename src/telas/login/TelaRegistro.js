@@ -1,13 +1,18 @@
 import React from 'react';
 import {
-	Text,
-	TextInput,
-	Button,
 	View,
 	Alert,
 	ActivityIndicator,
 	ScrollView,
     AsyncStorage} from 'react-native';
+import {
+  FormLabel,
+  FormInput,
+  Button,
+  Icon,
+  Text
+} from 'react-native-elements';
+
 import hash from 'hash.js';
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 
@@ -106,24 +111,20 @@ export default class TelaRegistro extends React.Component {
 			<ScrollView style={styles.scrollview}
 				showsVerticalScrollIndicator = {true}>
 
-                <Text style={styles.textViewOverButton}>
-                    Nome:
-                </Text>
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                    autoCapitalize="none"
-                    placeholder="Insira o seu nome"
-                    autoCorrect={true}
-					onChangeText={(nome) => this.setState({nome})}/>
-                <Text style={styles.textViewOverButton}>
-					Email:
-                </Text>
-                <TextInput
+                <FormLabel>Nome:</FormLabel>
+                <FormInput
+                        style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                        autoCapitalize="none"
+                        placeholder="Insira o seu nome"
+                        autoCorrect={true}
+                        onChangeText={(nome) => this.setState({nome})}/>
+                <FormLabel> Email: </FormLabel>
+                <FormInput
                         style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                         autoCapitalize="none"
                         placeholder="Insira o seu e-mail"
                         autoCorrect={true}
-						onChangeText={(email) => this.setState({email})}/>
+                        onChangeText={(email) => this.setState({email})}/>
                 <Text style={styles.textViewOverButton}>
                     Senha:
                 </Text>
@@ -134,21 +135,18 @@ export default class TelaRegistro extends React.Component {
                         placeholder="Insira a senha"
                         autoCorrect={false}
 						onChangeText={(senha) => this.setState({senha})}/>
-                <Text style={styles.textViewOverButton}>
-                  Confirmar Senha:
-                </Text>
-                <TextInput
+                <FormLabel> Confirmar Senha:</FormLabel>
+                <FormInput
                         style={{height: 40, borderColor: 'gray', borderWidth: 0}}
                         autoCapitalize="none"
                         secureTextEntry={true}
-                placeholder={"Confirme a senha"}
-                autoCorrect={false}
-				onChangeText={(confirmarSenha) => this.setState({confirmarSenha})}/>
-                <View style={styles.viewbuttonsLoginPage}>
-                    <Button
-                        onPress = {() => {this.registrar()}}
-                        title = "Registrar-se" / >
-                </View>
+                        placeholder={"Confirme a senha"}
+                        autoCorrect={false}
+                        onChangeText={(confirmarSenha) => this.setState({confirmarSenha})}/>
+                <Button
+                    onPress = {() => {this.registrar()}}
+                    title = "Registrar-se"
+                    style={styles.button}/>
             </ScrollView>
         );
     }

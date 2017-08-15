@@ -5,7 +5,8 @@ import {
     StatusBar,
     AsyncStorage,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    KeyboardAvoidingView
 } from 'react-native';
 import {
     FormLabel,
@@ -100,11 +101,12 @@ export default class TelaLogin extends React.Component {
 			return <ActivityIndicator style={styles.indicator}/>
 		}
         return (
-            <ScrollView
-                style = {{backgroundColor: '#D5FFD5'}}
-                showsVerticalScrollIndicator = {true}>
 
-                <StatusBar backgroundColor="#00A043" barStyle="light-content" />
+           <ScrollView
+               style = {styles.scrollview}
+               showsVerticalScrollIndicator = {true}>
+
+               <StatusBar backgroundColor="#00A043" barStyle="light-content" />
 
                 <View style={styles.logo}>
                   <Text>

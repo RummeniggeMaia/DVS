@@ -29,5 +29,9 @@ export default StyleSheet.create({
 	scrollview: {
 		backgroundColor: '#D5FFD5',
         padding: 10
-	}
+	},
+    button: {
+        backgroundColor = "#5497FF",
+        padding: 10,
+    }
 });

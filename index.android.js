@@ -8,9 +8,11 @@ import {
 import TelaLogin from './src/telas/login/TelaLogin';
 import TelaRegistro from './src/telas/login/TelaRegistro';
 import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
-// import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
 import TelaDadosPessoais from './src/telas/login/TelaDadosPessoais';
+// import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
+
 //import TelaDadosDaConta from './src/telas/login/TelaDadosDaConta';
+//import TelaAlterarSenha from './src/telas/login/TelaAlterarSenha';
 
 const DietaViverSaudavel = StackNavigator({
     Login: {
@@ -23,9 +25,9 @@ const DietaViverSaudavel = StackNavigator({
     Alimentacao: {
         screen: TelaAlimentacao
     },
-   DadosPessoais: {
+    DadosPessoais: {
         screen: TelaDadosPessoais
-   },
+    },
 //    DadosDaConta: {
 //        screen: TelaDadosDaConta
 //    },
