@@ -21,7 +21,6 @@ const DietaViverSaudavel = StackNavigator({
     Registro: {
         screen: TelaRegistro
     },
-
     Alimentacao: {
         screen: TelaAlimentacao
     },

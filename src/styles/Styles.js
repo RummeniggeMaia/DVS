@@ -5,33 +5,38 @@ export default StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#D5FFD5',
     },
-    link: {
+    text_link: {
         color:'blue',
-        paddingLeft:15
+        fontSize: 12,
+        paddingLeft:10
     },
     logo: {
-        flex: 0.2,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#5497FF',
-        padding: 30
     },
     form_input: {
         flex: 1,
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 0
     },
-	indicator: {
-		flex: 1,
-		backgroundColor: '#D5FFD5',
-	},
-	scrollview: {
-		backgroundColor: '#D5FFD5',
+    indicator: {
+        flex: 1,
+        backgroundColor: '#D5FFD5',
+    },
+    scrollview: {
+        backgroundColor: '#D5FFD5',
         padding: 10
-	},
+    },
     button: {
-        backgroundColor = "#5497FF",
+        backgroundColor: "#5497FF",
         padding: 10,
+    },
+    form_label: {
+        color: 'black',
+        fontSize: 12,
+    },
+    text_label: {
+        color: 'black',
+        fontSize: 16,
+        textAlign: 'center',
     }
 });

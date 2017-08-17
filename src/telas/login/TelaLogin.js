@@ -3,10 +3,11 @@ import {
     ScrollView,
     View,
     StatusBar,
-    AsyncStorage,
     Alert,
     ActivityIndicator,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    AsyncStorage,
+    Image,
 } from 'react-native';
 import {
     FormLabel,
@@ -14,19 +15,20 @@ import {
     Button,
     Icon,
     SocialIcon,
-    Text
+    Text,
 } from 'react-native-elements';
+
 import hash from 'hash.js';
-import styles from 'DietaViverSaudavel/src/styles/Styles';
+import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 
 export default class TelaLogin extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            login: "",
+            email: "",
             senha: "",
-			carregou: true,
+            carregou: true,
         };
     }
 
@@ -34,95 +36,91 @@ export default class TelaLogin extends React.Component {
         title: 'Login',
     };
 
-	async usuarioLogado() {
-        await AsyncStorage.getItem("dvs_user", (error, result) => {
-            if (error != null || result == null) {
-                return null;
-            } else {
-                return JSON.parse(result);
-            }
-        });
-    }
-
     async logar(autoLogin = false) {
-		if (!this.state.login || !this.state.senha) return;
-        this.setState({carregou: false});
+        if (!this.state.login || !this.state.senha) {
+            return;
+        }
         let senha = this.state.senha;
         if (!autoLogin) {
-            senha = hash.sha256().update(this.state.senha).digest('hex');
+            senha = hash.sha256().update(senha).digest('hex');
         }
-		await fetch('http://192.168.0.104/dvs/logar.php', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				email: this.state.email,
-				senha: senha,
-				func: "logar"
-			})
-		}).then((response) => response.json())
+        this.setState({carregou: false});
+        await fetch('http://192.168.0.104/dvs/logar.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                senha: senha,
+                func: "logar"
+            })
+        }).then((response) => response.json())
         .then((responseJson) => {
-			if (responseJson.resp.status == "ok") {
+            if (responseJson.resp.status == "ok") {
                 let usuario = JSON.stringify({
-        			nome: this.state.nome,
-        			email: this.state.email,
-        			senha: senha
-        		});
-                let res = this.salvarUsuario(usuario);
+                    nome: this.state.nome,
+                    email: this.state.email,
+                    senha: senha,
+                    nascimento: responseJson.resp.user.nascimento,
+                    peso: responseJson.resp.user.peso,
+                    altura: responseJson.resp.user.altura,
+                });
+                let res = daoLocal.salvarDados("dvs_user", usuario);
                 if (res) {
                     this.props.navigation.navigate('Alimentacao');
                 } else {
                     Alert.alert("Falha durante login", "Não pode salvar dados.");
                 }
-			} else {
+            } else {
                 Alert.alert("Falha durante login", "Credenciais inválidas.");
             }
-		}).catch((error) => {
-			Alert.alert("Falha durante login", "Login não pode ser realizado.");
-		}).done(() => {
+        }).catch((error) => {
+            Alert.alert("Falha durante login", "Login não pode ser realizado.");
+//            alert(JSON.stringify(error));
+        }).done(() => {
             this.setState({carregou: true});
         });
     }
-
+    
+    async verificarUsuario() {
+        let usuario = await AsyncStorage.getItem("dvs_user");
+        usuario = JSON.parse(usuario);
+        this.state.login = usuario['email'];
+        this.state.senha = usuario['senha'];
+        this.logar(true);
+    }
+    
     //Verifica se já tem um usuario logado e efetua o login automaticamente.
-	componentDidMount() {
-        let usuario = this.usuarioLogado();
-        if (usuario != null) {
-            this.state.login = usuario.login;
-            this.state.senha = usuario.senha;
-            this.logar(true);
-        }
-	}
+    componentDidMount() {
+        this.verificarUsuario();
+    }
 
     render() {
-		if (!this.state.carregou) {
-			return <ActivityIndicator style={styles.indicator}/>
-		}
+        if (!this.state.carregou) {
+            return <ActivityIndicator style={styles.indicator}/>
+        }
         return (
-
            <ScrollView
-               style = {styles.scrollview}
+               style={styles.scrollview}
                showsVerticalScrollIndicator = {true}>
 
                <StatusBar backgroundColor="#00A043" barStyle="light-content" />
 
                 <View style={styles.logo}>
-                  <Text>
-                      (LOGO) App Dieta Viver Saudável
-                  </Text>
+                    <Image style={{width: 50, height: 50}}
+                        source={require('DietaViverSaudavel/src/imgs/logo.png')} />
                 </View>
                 <View>
-                    <FormLabel>Login:</FormLabel>
+                    <FormLabel labelStyle={styles.form_label}>Login:</FormLabel>
                     <FormInput
-                        value={this.state.login}
                         style = {styles.form_input}
                         autoCapitalize="none"
                         placeholder='Insira seu e-mail.'
                         keyboardType = 'email-address'
-                        onChangeText={(login) => this.setState({login})}/>
-                    <FormLabel>Senha:</FormLabel>
+                        onChangeText={(email) => this.setState({email})}/>
+                    <FormLabel labelStyle={styles.form_label}>Senha:</FormLabel>
                     <FormInput
                         style = {styles.form_input}
                         autoCapitalize="none"
@@ -131,18 +129,18 @@ export default class TelaLogin extends React.Component {
                         onChangeText={(senha) => this.setState({senha})}/>
                     <Button
                         title = "Login"
-                        backgroundColor = "#5497FF"
+                        buttonStyle={styles.button}
                         onPress={() => this.logar() } />
                     <SocialIcon
                         title='Facebook'
                         button
                         type='facebook' />
                     <Text
-                        style={ styles.link }
+                        style={ styles.text_link }
                         onPress = { () => this.props.navigation.navigate('Registro') }>
                         Registrar-se
                     </Text>
-                    <Text style={styles.link}
+                    <Text style={styles.text_link}
                         onPress = { () => this.props.navigation.navigate('RecuperarSenha') }>
                         Esqueceu a senha?
                     </Text>

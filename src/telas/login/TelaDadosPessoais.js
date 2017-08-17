@@ -2,32 +2,82 @@ import React from 'react';
 import {
     ScrollView,
     View,
-    StatusBar
+    StatusBar,
+    Alert,
+    AsyncStorage,
 } from 'react-native';
 import {
-  FormLabel,
-  FormInput,
-  Button,
-  Icon,
-  Text
+    FormLabel,
+    FormInput,
+    Button,
+    Icon,
+    Text,
 } from 'react-native-elements';
-import styles from 'DietaViverSaudavel/src/styles/Style.js';
 import DatePicker from 'react-native-datepicker';
+
+import styles from 'DietaViverSaudavel/src/styles/Styles.js';
+
 
 export default class TelaDadosPessoais extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            nascimento: "",
+            nascimento: "01/01/1990",
             peso: "",
             altura: "",
             carregou: true,
         };
     }
+
     static navigationOptions = {
         title: 'Dados Pessoais',
     };
+
+    async salvarDadosPessoais() {
+        this.setState({carregou: false});
+        let usuario = await AsyncStorage.getItem('dvs_user');
+        if (usuario != null) {
+            usuario = JSON.parse(usuario);
+        }
+        await fetch('http://192.168.0.104/dvs/salvar_dados.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login: usuario['email'],
+                senha: usuario['senha'],
+                nascimento: this.state.nascimento,
+                peso: this.state.peso,
+                altura: this.state.altura,
+                func: "salvar_dados"
+            })
+        }).then((response) => response.json())
+        .then((responseJson) =>{
+            if (responseJson.resp.status == "ok") {
+                usuario['nascimento'] = this.state.nascimento;
+                usuario['peso'] = this.state.peso; 
+                usuario['altura'] = this.state.altura;
+                let res = true;
+                AsyncStorage.setItem("dvs_user", usuario).catch((error) => {
+                    res = false;
+                });
+                if (res) {
+                    this.props.navigation.navigate('Alimentacao');
+                } else {
+                    Alert.alert("Erro", "Não pode salvar dados.");
+                }
+            } else if (responseJson.resp.status == "err_2") {
+                Alert.alert("Erro", "Sessão expirada.");
+            }
+        }).catch((error) => {
+            Alert.alert("Falha no registro", "Falha no servidor.");
+        }).done(() => {
+            this.setState({carregou: true});
+        });
+    }
 
     render() {
         return (
@@ -36,21 +86,16 @@ export default class TelaDadosPessoais extends React.Component {
                 showsVerticalScrollIndicator = {true}>
 
                 <View>
-                    <FormLabel>
+                    <FormLabel labelStyle={styles.text_label}>
                         Antes de continuar preencha os dados:
                     </FormLabel>
-                    <View style={styles.line}></View>
-                    <FormLabel>
-                        Nascimento:
-                    </FormLabel>
+                    <FormLabel labelStyle={styles.form_label}> Nascimento: </FormLabel>
                     <DatePicker
-                        style={{width: 200 }}
-                        date={this.state.date}
+                        style={{width:250}}
+                        date={this.state.nascimento}
                         mode="date"
-                        placeholder="selecione"
+                        placeholder="selecione..."
                         format="DD/MM/YYYY"
-                        minDate="1900-01-01"
-                        maxDate="2017-10-08"
                         confirmBtnText="Confirmar"
                         cancelBtnText="Cancelar"
                         customStyles={{
@@ -61,28 +106,28 @@ export default class TelaDadosPessoais extends React.Component {
                                 marginLeft: 15
                             },
                             dateInput: {
-                                marginLeft: 56
+                                marginLeft: 56,
                             }
                         }}
-                        onDateChange={(date) => {this.setState({date: date})}} />
-                    <FormLabel>
-                        Altura:
-                    </FormLabel>
+                        onDateChange={(date) => {this.setState({nascimento: date})}} />
+                    <FormLabel labelStyle={styles.form_label}> Altura: </FormLabel>
                     <FormInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                            style={styles.form_input}
                             autoCapitalize="none"
-                            placeholder={this.state.textHeight} />
-                    <FormLabel>
-                    Peso:
-                    </FormLabel>
+                            placeholder="Inserir sua altura"
+                            keyboardType='numeric'
+                            onChangeText={(altura) => this.setState({altura})}/>
+                    <FormLabel labelStyle={styles.form_label}>Peso:</FormLabel>
                     <FormInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 0}}
+                        style={styles.form_input}
                         autoCapitalize="none"
-                        placeholder={this.state.textWeight} />
+                        placeholder="Inserir seu peso"
+                        keyboardType='numeric'
+                        onChangeText={(peso) => this.setState({peso})}/>
                     <Button
                         title = "Salvar dados"
-                        color = {styles.button} />
-                    </View>
+                        buttonStyle={styles.button}
+                        onPress = {() => this.salvarDadosPessoais()} />
                 </View>
             </ScrollView>
         );
