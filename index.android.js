@@ -6,7 +6,7 @@ import {
     StackNavigator
 } from 'react-navigation';
 import TelaLogin from './src/telas/login/TelaLogin';
-import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
+//import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
 import TelaRegistro from './src/telas/login/TelaRegistro';
 //import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
 import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
@@ -18,9 +18,9 @@ const DietaViverSaudavel = StackNavigator({
     Login: {
         screen: TelaLogin
     },
-    // Registro: {
-    //     screen: TelaRegistro
-    // },
+     Registro: {
+         screen: TelaRegistro
+     },
     //RecuperarSenha: {
     //     screen: TelaRecuperarSenha
     // },

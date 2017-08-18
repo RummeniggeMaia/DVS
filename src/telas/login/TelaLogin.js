@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, StatusBar, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, View, StatusBar, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import {
     FormLabel,
     FormInput,
@@ -8,10 +8,14 @@ import {
     SocialIcon,
     Text
 } from 'react-native-elements';
+import FBSDK, {LoginManager} from 'react-native-fbsdk';
 import styles from 'DietaViverSaudavel/src/styles/Styles';
-import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
+import PropTypes from 'prop-types';
+//import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
 
 export default class TelaLogin extends React.Component {
+
+
   constructor(props) {
     super(props);
     this.state = { textLogin: 'Insira seu login.',
@@ -20,6 +24,7 @@ export default class TelaLogin extends React.Component {
                    textPassword: 'Insira sua senha.'
                  };
     }
+
     static navigationOptions = {
         title: 'Login',
     };
@@ -52,6 +57,11 @@ export default class TelaLogin extends React.Component {
                           secureTextEntry={true}
                           onChangeText={(text) => this.setState({password})}
                           placeholder={this.state.textPassword} />
+                 <View>
+                <TouchableOpacity>
+                        <Text>Login Facebook!</Text>
+                </TouchableOpacity>
+                </View>
                   <Button
                       onPress = { () => this.props.navigation.navigate('Registro') }
                       title = "Login"
