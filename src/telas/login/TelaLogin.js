@@ -8,7 +8,7 @@ import {
     SocialIcon,
     Text
 } from 'react-native-elements';
-import FBSDK, {LoginManager} from 'react-native-fbsdk';
+import FBSDK, {LoginManager, LoginButton, AccessToken } from 'react-native-fbsdk';
 import styles from 'DietaViverSaudavel/src/styles/Styles';
 import PropTypes from 'prop-types';
 //import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
@@ -58,9 +58,6 @@ export default class TelaLogin extends React.Component {
                           onChangeText={(text) => this.setState({password})}
                           placeholder={this.state.textPassword} />
                  <View>
-                <TouchableOpacity>
-                        <Text>Login Facebook!</Text>
-                </TouchableOpacity>
                 </View>
                   <Button
                       onPress = { () => this.props.navigation.navigate('Registro') }
@@ -70,6 +67,24 @@ export default class TelaLogin extends React.Component {
                       title='Facebook'
                       button
                       type='facebook' />
+                  <LoginButton
+                        publishPermissions={["publish_actions"]}
+                        onLoginFinished={
+                          (error, result) => {
+                            if (error) {
+                              alert("login has error: " + result.error);
+                            } else if (result.isCancelled) {
+                              alert("login is cancelled.");
+                            } else {
+                              AccessToken.getCurrentAccessToken().then(
+                                (data) => {
+                                  alert(data.accessToken.toString())
+                                }
+                              )
+                            }
+                          }
+                        }
+                        onLogoutFinished={() => alert("logout.")}/>
                   <Text style={ styles.link }>
                       Registrar-se
                   </Text>
