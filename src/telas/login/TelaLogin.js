@@ -11,7 +11,9 @@ import {
 import FBSDK, {LoginManager, LoginButton, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
 import styles from 'DietaViverSaudavel/src/styles/Styles';
 import PropTypes from 'prop-types';
-//import FormLogin from 'DietaViverSaudavel/src/components/FormLogin';
+import { NavigationActions } from 'react-navigation'
+
+
 
 export default class TelaLogin extends React.Component {
 
@@ -36,6 +38,15 @@ export default class TelaLogin extends React.Component {
       try{
          let a = await AsyncStorage.getItem('first_name');
          console.log(a)
+
+         const navigateAction = NavigationActions.navigate({
+           routeName: 'Alimentacao',
+           params: {},
+           action: NavigationActions.navigate({ routeName: 'Alimentacao'})
+         })
+
+         this.props.navigation.dispatch(navigateAction)
+         console.log("dps do navigator")
       }catch(erro){
 
       }

@@ -24,9 +24,9 @@ const DietaViverSaudavel = StackNavigator({
     //RecuperarSenha: {
     //     screen: TelaRecuperarSenha
     // },
-    // Alimentacao: {
-    //     screen: TelaAlimentacao
-    // }
+     Alimentacao: {
+         screen: TelaAlimentacao
+     }
     //DadosPessoais: {
     //        screen: TelaDadosPessoais
     //},

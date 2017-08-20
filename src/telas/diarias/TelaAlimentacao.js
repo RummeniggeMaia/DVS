@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View} from 'react-native';
+import { Text, ScrollView, StatusBar, View} from 'react-native';
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 
 export default class TelaAlimentacao extends React.Component {
@@ -9,14 +9,21 @@ export default class TelaAlimentacao extends React.Component {
     };
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    App Dieta Vida Saudável
-                </Text>
-                <Text style={styles.instructions}>
-                    Alimentação
-                </Text>
-            </View>
+          <ScrollView
+              style = {{backgroundColor: '#D5FFD5'}}
+              showsVerticalScrollIndicator = {true}>
+
+              <StatusBar backgroundColor="#00A043" barStyle="light-content" />
+
+              <View>
+                  <Text style={styles.welcome}>
+                      App Dieta Vida Saudável
+                  </Text>
+                  <Text style={styles.instructions}>
+                      Alimentação
+                  </Text>
+              </View>
+            </ScrollView>
         );
     }
 }
