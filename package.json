@@ -1,6 +1,6 @@
 {
   "name": "DietaViverSaudavel",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -15,6 +15,8 @@
     "react-native-fbsdk": "^0.6.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-masked-text": "^1.5.3",
+    "react-native-menu": "^0.21.0",
+    "react-native-popup-menu": "^0.8.0",
     "react-native-sha256": "^1.0.1",
     "react-native-ui-xg": "0.0.6",
     "react-native-vector-icons": "^4.3.0",

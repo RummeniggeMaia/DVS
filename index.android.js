@@ -9,10 +9,9 @@ import TelaLogin from './src/telas/login/TelaLogin';
 import TelaRegistro from './src/telas/login/TelaRegistro';
 import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
 import TelaDadosPessoais from './src/telas/login/TelaDadosPessoais';
-// import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
+import { MenuContext } from 'react-native-popup-menu';
+import MenuTopo from './src/components/MenuTopo';
 
-//import TelaDadosDaConta from './src/telas/login/TelaDadosDaConta';
-//import TelaAlterarSenha from './src/telas/login/TelaAlterarSenha';
 
 const DietaViverSaudavel = StackNavigator({
     Login: {
@@ -27,12 +26,6 @@ const DietaViverSaudavel = StackNavigator({
     DadosPessoais: {
         screen: TelaDadosPessoais
     },
-//    DadosDaConta: {
-//        screen: TelaDadosDaConta
-//    },
-// 	RecuperarSenha: {
-    //     screen: TelaRecuperarSenha
-    // },
 }, {
     navigationOptions: {
         headerTintColor: 'white',
@@ -42,4 +35,11 @@ const DietaViverSaudavel = StackNavigator({
     },
 });
 
-AppRegistry.registerComponent('DietaViverSaudavel', () => DietaViverSaudavel);
+const App = () => (
+    <MenuContext style={{ flex: 1 }}>
+        <DietaViverSaudavel/>
+    </MenuContext>
+);
+
+
+AppRegistry.registerComponent('DietaViverSaudavel', () => App);

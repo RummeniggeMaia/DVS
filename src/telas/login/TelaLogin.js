@@ -17,9 +17,11 @@ import {
     SocialIcon,
     Text,
 } from 'react-native-elements';
+import { NavigationActions } from 'react-navigation';
 
 import hash from 'hash.js';
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
+import Util from 'DietaViverSaudavel/src/util/Util.js';
 
 export default class TelaLogin extends React.Component {
 
@@ -37,7 +39,7 @@ export default class TelaLogin extends React.Component {
     };
 
     async logar(autoLogin = false) {
-        if (!this.state.login || !this.state.senha) {
+        if (!this.state.email || !this.state.senha) {
             return;
         }
         let senha = this.state.senha;
@@ -45,7 +47,7 @@ export default class TelaLogin extends React.Component {
             senha = hash.sha256().update(senha).digest('hex');
         }
         this.setState({carregou: false});
-        await fetch('http://192.168.0.104/dvs/logar.php', {
+        await fetch(Util.SERVIDOR_URL, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -60,16 +62,28 @@ export default class TelaLogin extends React.Component {
         .then((responseJson) => {
             if (responseJson.resp.status == "ok") {
                 let usuario = JSON.stringify({
-                    nome: this.state.nome,
+                    nome: responseJson.resp.user.nome,
                     email: this.state.email,
                     senha: senha,
                     nascimento: responseJson.resp.user.nascimento,
                     peso: responseJson.resp.user.peso,
                     altura: responseJson.resp.user.altura,
                 });
-                let res = daoLocal.salvarDados("dvs_user", usuario);
+                let res = true;
+                AsyncStorage.setItem(Util.USUARIO, usuario).catch((error) => {
+                    res = false;
+                });
                 if (res) {
-                    this.props.navigation.navigate('Alimentacao');
+                    const resetAction = NavigationActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({
+                                routeName: 'Alimentacao',
+                                params:{nome: responseJson.resp.user.nome}
+                            })
+                        ]
+                    });
+                    this.props.navigation.dispatch(resetAction);
                 } else {
                     Alert.alert("Falha durante login", "Não pode salvar dados.");
                 }
@@ -78,23 +92,29 @@ export default class TelaLogin extends React.Component {
             }
         }).catch((error) => {
             Alert.alert("Falha durante login", "Login não pode ser realizado.");
-//            alert(JSON.stringify(error));
         }).done(() => {
-            this.setState({carregou: true});
+            // if (this.isMounted)
+            //     this.setState({carregou: true});
         });
     }
-    
+
     async verificarUsuario() {
-        let usuario = await AsyncStorage.getItem("dvs_user");
-        usuario = JSON.parse(usuario);
-        this.state.login = usuario['email'];
-        this.state.senha = usuario['senha'];
-        this.logar(true);
+        let usuario = await AsyncStorage.getItem(Util.USUARIO);
+        if (usuario != null) {
+            usuario = JSON.parse(usuario);
+            this.state.email = usuario['email'];
+            this.state.senha = usuario['senha'];
+            this.logar(true);
+        }
     }
-    
+
     //Verifica se já tem um usuario logado e efetua o login automaticamente.
     componentDidMount() {
         this.verificarUsuario();
+    }
+
+    componentWillUnmount() {
+        this.setState({carregou: true});
     }
 
     render() {

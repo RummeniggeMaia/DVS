@@ -5,16 +5,19 @@ import {
     Alert,
     ActivityIndicator,
     ScrollView,
-    AsyncStorage} from 'react-native';
+    AsyncStorage
+ } from 'react-native';
 import {
     FormLabel,
     FormInput,
     Button,
     Icon,
 } from 'react-native-elements';
+import { NavigationActions } from 'react-navigation';
 
 import hash from 'hash.js';
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
+import Util from 'DietaViverSaudavel/src/util/Util.js';
 
 export default class TelaRegistro extends React.Component {
 
@@ -39,7 +42,7 @@ export default class TelaRegistro extends React.Component {
         }
         this.setState({carregou: false});
         let senha = hash.sha256().update(this.state.senha).digest('hex');
-        await fetch('http://192.168.0.104/dvs/registrar.php', {
+        await fetch(Util.SERVIDOR_URL, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -60,11 +63,22 @@ export default class TelaRegistro extends React.Component {
                     senha: senha
                 });
                 let res = true;
-                AsyncStorage.setItem("dvs_user", usuario).catch((error) => {
+                AsyncStorage.setItem(Util.USUARIO, usuario).catch((error) => {
                     res = false;
                 });
                 if (res) {
-                    this.props.navigation.navigate('DadosPessoais');
+                    const resetAction = NavigationActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate(
+                                {
+                                    routeName: 'DadosPessoais',
+                                    params:{primeiraVez: true}
+                                }
+                            )
+                        ],
+                    });
+                    this.props.navigation.dispatch(resetAction);
                 } else {
                     Alert.alert("Falha no registro", "Não pode salvar dados.");
                 }
@@ -105,7 +119,7 @@ export default class TelaRegistro extends React.Component {
 
                 <FormLabel labelStyle={styles.form_label}>Nome:</FormLabel>
                 <FormInput
-                        style={styles.form_input} 
+                        style={styles.form_input}
                         autoCapitalize="none"
                         placeholder="Insira o seu nome"
                         autoCorrect={true}

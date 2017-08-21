@@ -19,6 +19,7 @@ DEBBUGER = npm install -g react-devtools
 - npm i react-native-elements --save
 - npm install react-native-datepicker --save
 - npm install hash.js --save
+- npm i react-native-menu --save
 React Native SnackBar
 
 =======================

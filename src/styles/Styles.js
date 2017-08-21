@@ -38,5 +38,9 @@ export default StyleSheet.create({
         color: 'black',
         fontSize: 16,
         textAlign: 'center',
+    },
+    menu_option: {
+        flexDirection: 'row', 
+        alignItems: 'center'
     }
 });
