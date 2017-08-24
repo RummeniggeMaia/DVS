@@ -17,9 +17,18 @@ import {
     SocialIcon,
     Text,
 } from 'react-native-elements';
-import { NavigationActions } from 'react-navigation';
 
+import { NavigationActions } from 'react-navigation';
+import FBSDK, {
+    LoginManager,
+    LoginButton,
+    AccessToken,
+    GraphRequestManager,
+    GraphRequest
+} from 'react-native-fbsdk';
 import hash from 'hash.js';
+import PropTypes from 'prop-types';
+
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 import Util from 'DietaViverSaudavel/src/util/Util.js';
 
@@ -116,6 +125,37 @@ export default class TelaLogin extends React.Component {
     componentWillUnmount() {
         this.setState({carregou: true});
     }
+    async saveInfo(result){
+        console.log("result");
+        AsyncStorage.setItem('first_name', result['first_name']);
+        AsyncStorage.setItem('last_name', result['last_name']);
+        try{
+            let a = await AsyncStorage.getItem('first_name');
+            console.log(a)
+
+            const navigateAction = NavigationActions.navigate({
+                routeName: 'Alimentacao',
+                params: {},
+                action: NavigationActions.navigate({ routeName: 'Alimentacao'})
+            })
+
+            this.props.navigation.dispatch(navigateAction)
+            console.log("dps do navigator")
+        }catch(erro){
+        }
+      }
+    }
+
+    getAllInfo(result){
+    AsyncStorage.getAllKeys((err, keys) => {
+        AsyncStorage.multiGet(keys, (err, stores) => {
+            stores.map((result, i, store) => {
+                // get at each store's key/value so you can work with it
+                let key = store[i][0];
+                let value = store[i][1];
+            });
+        });
+    });
 
     render() {
         if (!this.state.carregou) {
@@ -151,10 +191,52 @@ export default class TelaLogin extends React.Component {
                         title = "Login"
                         buttonStyle={styles.button}
                         onPress={() => this.logar() } />
-                    <SocialIcon
-                        title='Facebook'
-                        button
-                        type='facebook' />
+                        <LoginButton
+                            publishPermissions={["publish_actions"]}
+                            onLoginFinished={
+                                (error, result) => {
+                                    if (error) {
+                                        alert("login has error: " + result.error);
+                                    } else if (result.isCancelled) {
+                                        alert("login is cancelled.");
+                                    } else {
+                                        AccessToken.getCurrentAccessToken().then((data) => {
+                                            let accessToken = data.accessToken;
+                                            alert(accessToken.toString());
+                                            const responseInfoCallback = (error, result) => {
+                                                if (error) {
+                                                    console.log(error)
+                                                    alert('Error fetching data: ' + error.toString());
+                                                } else {
+                                                    console.log(result)
+                                                    console.log(result['first_name'])
+                                                    try {
+                                                      console.log("Aqui!")
+                                                      this.saveInfo(result);
+                                                    } catch (error) {
+                                                    // Error saving data
+                                                    }
+                                                    alert('Success fetching data: ' + result.toString());
+                                                }
+                                            }
+                                            const infoRequest = new GraphRequest(
+                                                '/me', {
+                                                    accessToken: accessToken,
+                                                    parameters: {
+                                                        fields: {
+                                                            string: 'email,name,first_name,middle_name,last_name'
+                                                        }
+                                                    }
+                                                },
+                                                responseInfoCallback
+                                            );
+                                        // Start the graph request.
+                                        new GraphRequestManager().addRequest(infoRequest).start();
+                                    })
+                                }
+                            }
+                        }
+                        onLogoutFinished={() => alert("logout.")}/>
                     <Text
                         style={ styles.text_link }
                         onPress = { () => this.props.navigation.navigate('Registro') }>

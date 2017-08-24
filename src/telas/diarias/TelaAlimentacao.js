@@ -7,7 +7,6 @@ import {
     ScrollView,
 } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
-
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 import MenuTopo from 'DietaViverSaudavel/src/components/MenuTopo';
 import Util from 'DietaViverSaudavel/src/util/Util.js';
