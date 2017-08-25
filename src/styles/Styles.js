@@ -29,6 +29,7 @@ export default StyleSheet.create({
     button: {
         backgroundColor: "#5497FF",
         padding: 10,
+        marginBottom: 5,
     },
     form_label: {
         color: 'black',
@@ -40,7 +41,17 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
     menu_option: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center'
+    },
+    facebook_login: {
+        padding: 20,
+        marginLeft:14,
+        marginRight:14,
+        marginTop:10,
+        marginBottom:10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
     }
 });

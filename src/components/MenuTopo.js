@@ -5,12 +5,12 @@ import {
     TouchableOpacity,
     AsyncStorage
 } from 'react-native';
-import {
-    Menu,
+import Menu,{
     MenuOptions,
     MenuOption,
     MenuTrigger
-} from 'react-native-popup-menu';
+} from 'react-native-menu';
+
 import {
     Icon,
     FormLabel,
@@ -31,7 +31,6 @@ export default class MenuTopo extends React.Component {
     }
 
     async sair() {
-        // this.setState({opened: false});
         await AsyncStorage.removeItem(Util.USUARIO);
         this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
@@ -43,7 +42,6 @@ export default class MenuTopo extends React.Component {
     }
 
     dadosPessoais() {
-        this.setState({opened: false});
         this.props.navigation.navigate(
             'DadosPessoais', {
                 params:{primeiraVez:false}
@@ -52,18 +50,54 @@ export default class MenuTopo extends React.Component {
         return false;
     }
 
+    dadosConta() {
+        this.props.navigation.navigate('DadosConta');
+        return false;
+    }
+
+    funcaoMenu(valorMenu) {
+        if (valorMenu == 0) {
+            this.dadosPessoais();
+        } else if (valorMenu == 1) {
+            this.dadosConta();
+        } else if (valorMenu == 2) {
+            this.sair();
+        }
+    }
+
+    async verificarUsuario() {
+        let usuario = await AsyncStorage.getItem(Util.USUARIO);
+        if (usuario == null) {
+            const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [
+                    NavigationActions.navigate({ routeName: 'Login'})
+                ]
+            });
+            this.props.navigation.dispatch(resetAction);
+        }
+    }
+
+    componentDidMount() {
+        this.verificarUsuario();
+    }
+
     render() {
+        const renderTouchable = () => <TouchableOpacity/>;
         return (
             <Menu style={{width:25}}
-                opened={this.state.opened}>
-                <MenuTrigger
-                    onPress={() => this.setState({opened: true})}>
+                onSelect={(value) => this.funcaoMenu(value)}>
+                <MenuTrigger renderTouchable={renderTouchable}>
                     <Icon name='ellipsis-v'
                         type='font-awesome'
                         color='white'/>
                 </MenuTrigger>
                 <MenuOptions optionsContainerStyle={{backgroundColor:'#D5FFD5'}}>
-                    <MenuOption style={styles.menu_option}>
+                    <MenuOption
+                            style={styles.menu_option}
+                            value={0}
+                            renderTouchable={renderTouchable}>
+
                         <Icon name='user'
                             size={16}
                             type='font-awesome'
@@ -72,7 +106,8 @@ export default class MenuTopo extends React.Component {
                         <Text labelStyle={styles.form_label}>Dados Pessoais</Text>
                     </MenuOption>
                     <MenuOption style={styles.menu_option}
-                                onSelect={() => this.dadosPessoais() }>
+                                value={1}
+                                renderTouchable={renderTouchable}>
                         <Icon name='key'
                             size={16}
                             type='font-awesome'
@@ -84,7 +119,8 @@ export default class MenuTopo extends React.Component {
                         <Divider/>
                     </MenuOption>
                     <MenuOption style={styles.menu_option}
-                                onSelect={() => this.sair()}>
+                                value={2}
+                                renderTouchable={renderTouchable}>
                         <Icon name='sign-out'
                             size={16}
                             type='font-awesome'

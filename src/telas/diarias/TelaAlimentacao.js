@@ -20,22 +20,24 @@ export default class TelaAlimentacao extends React.Component {
         }
     }
 
-    async verificarUsuario() {
-        let usuario = await AsyncStorage.getItem(Util.USUARIO);
-        if (usuario == null) {
-            const resetAction = NavigationActions.reset({
-                index: 0,
-                actions: [
-                    NavigationActions.navigate({ routeName: 'Login'})
-                ]
-            });
-            this.props.navigation.dispatch(resetAction);
-        }
-    }
-
-    componentDidMount() {
-        this.verificarUsuario();
-    }
+    // async verificarUsuario() {
+    //     let usuario = await AsyncStorage.getItem(Util.USUARIO);
+    //     if (usuario == null) {
+    //         const resetAction = NavigationActions.reset({
+    //             index: 0,
+    //             actions: [
+    //                 NavigationActions.navigate({ routeName: 'Login'})
+    //             ]
+    //         });
+    //         this.props.navigation.dispatch(resetAction);
+    //     } else {
+    //
+    //     }
+    // }
+    //
+    // componentDidMount() {
+    //     this.verificarUsuario();
+    // }
 
     render() {
         return (
@@ -47,13 +49,6 @@ export default class TelaAlimentacao extends React.Component {
                     <ListItem title="Café da manhã"/>
                     <ListItem title="Almoço"/>
                     <ListItem title="Café da tarde"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
-                    <ListItem title="Janta"/>
                     <ListItem title="Janta"/>
                 </List>
             </ScrollView>

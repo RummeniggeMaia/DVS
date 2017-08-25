@@ -102,8 +102,8 @@ export default class TelaLogin extends React.Component {
         }).catch((error) => {
             Alert.alert("Falha durante login", "Login não pode ser realizado.");
         }).done(() => {
-            // if (this.isMounted)
-            //     this.setState({carregou: true});
+            if (this.isMounted)
+                this.setState({carregou: true});
         });
     }
 
@@ -125,6 +125,7 @@ export default class TelaLogin extends React.Component {
     componentWillUnmount() {
         this.setState({carregou: true});
     }
+
     async saveInfo(result){
         console.log("result");
         AsyncStorage.setItem('first_name', result['first_name']);
@@ -143,20 +144,19 @@ export default class TelaLogin extends React.Component {
             console.log("dps do navigator")
         }catch(erro){
         }
-      }
     }
 
-    getAllInfo(result){
-    AsyncStorage.getAllKeys((err, keys) => {
-        AsyncStorage.multiGet(keys, (err, stores) => {
-            stores.map((result, i, store) => {
-                // get at each store's key/value so you can work with it
-                let key = store[i][0];
-                let value = store[i][1];
+    getAllInfo(result) {
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiGet(keys, (err, stores) => {
+                stores.map((result, i, store) => {
+                    // get at each store's key/value so you can work with it
+                    let key = store[i][0];
+                    let value = store[i][1];
+                });
             });
         });
-    });
-
+    }
     render() {
         if (!this.state.carregou) {
             return <ActivityIndicator style={styles.indicator}/>
@@ -191,52 +191,54 @@ export default class TelaLogin extends React.Component {
                         title = "Login"
                         buttonStyle={styles.button}
                         onPress={() => this.logar() } />
-                        <LoginButton
-                            publishPermissions={["publish_actions"]}
-                            onLoginFinished={
-                                (error, result) => {
-                                    if (error) {
-                                        alert("login has error: " + result.error);
-                                    } else if (result.isCancelled) {
-                                        alert("login is cancelled.");
-                                    } else {
-                                        AccessToken.getCurrentAccessToken().then((data) => {
-                                            let accessToken = data.accessToken;
-                                            alert(accessToken.toString());
-                                            const responseInfoCallback = (error, result) => {
-                                                if (error) {
-                                                    console.log(error)
-                                                    alert('Error fetching data: ' + error.toString());
-                                                } else {
-                                                    console.log(result)
-                                                    console.log(result['first_name'])
-                                                    try {
-                                                      console.log("Aqui!")
-                                                      this.saveInfo(result);
-                                                    } catch (error) {
-                                                    // Error saving data
-                                                    }
-                                                    alert('Success fetching data: ' + result.toString());
+                    <LoginButton
+                        title="Facebook"
+                        style={styles.facebook_login}
+                        publishPermissions={["publish_actions"]}
+                        onLoginFinished={
+                            (error, result) => {
+                                if (error) {
+                                    alert("login has error: " + result.error);
+                                } else if (result.isCancelled) {
+                                    alert("login is cancelled.");
+                                } else {
+                                    AccessToken.getCurrentAccessToken().then((data) => {
+                                        let accessToken = data.accessToken;
+                                        alert(accessToken.toString());
+                                        const responseInfoCallback = (error, result) => {
+                                            if (error) {
+                                                console.log(error)
+                                                alert('Error fetching data: ' + error.toString());
+                                            } else {
+                                                console.log(result)
+                                                console.log(result['first_name'])
+                                                try {
+                                                  console.log("Aqui!")
+                                                  this.saveInfo(result);
+                                                } catch (error) {
+                                                // Error saving data
                                                 }
+                                                alert('Success fetching data: ' + result.toString());
                                             }
-                                            const infoRequest = new GraphRequest(
-                                                '/me', {
-                                                    accessToken: accessToken,
-                                                    parameters: {
-                                                        fields: {
-                                                            string: 'email,name,first_name,middle_name,last_name'
-                                                        }
+                                        }
+                                        const infoRequest = new GraphRequest(
+                                            '/me', {
+                                                accessToken: accessToken,
+                                                parameters: {
+                                                    fields: {
+                                                        string: 'email,name,first_name,middle_name,last_name'
                                                     }
-                                                },
-                                                responseInfoCallback
-                                            );
-                                        // Start the graph request.
-                                        new GraphRequestManager().addRequest(infoRequest).start();
-                                    })
-                                }
+                                                }
+                                            },
+                                            responseInfoCallback
+                                        );
+                                    // Start the graph request.
+                                    new GraphRequestManager().addRequest(infoRequest).start();
+                                })
                             }
                         }
-                        onLogoutFinished={() => alert("logout.")}/>
+                    }
+                    onLogoutFinished={() => alert("logout.")} />
                     <Text
                         style={ styles.text_link }
                         onPress = { () => this.props.navigation.navigate('Registro') }>

@@ -18,6 +18,7 @@ import { NavigationActions } from 'react-navigation';
 
 import styles from 'DietaViverSaudavel/src/styles/Styles.js';
 import Util from 'DietaViverSaudavel/src/util/Util.js';
+import MenuTopo from 'DietaViverSaudavel/src/components/MenuTopo';
 
 
 export default class TelaDadosPessoais extends React.Component {
@@ -32,9 +33,12 @@ export default class TelaDadosPessoais extends React.Component {
         };
     }
 
-    static navigationOptions = {
-        title: 'Dados Pessoais',
-    };
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: `Dados pessoais`,
+            headerRight: <MenuTopo navigation={navigation}/>
+        }
+    }
 
     async salvarDadosPessoais() {
         this.setState({carregou: false});
@@ -49,21 +53,21 @@ export default class TelaDadosPessoais extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                login: usuario['email'],
-                senha: usuario['senha'],
+                login: usuario.email,
+                senha: usuario.senha,
                 nascimento: this.state.nascimento,
                 peso: this.state.peso,
                 altura: this.state.altura,
-                func: "salvar_dados"
+                func: "salvar_dados_pessoais"
             })
         }).then((response) => response.json())
         .then((responseJson) =>{
             if (responseJson.resp.status == "ok") {
-                usuario['nascimento'] = this.state.nascimento;
-                usuario['peso'] = this.state.peso;
-                usuario['altura'] = this.state.altura;
+                usuario.nascimento = this.state.nascimento;
+                usuario.peso = this.state.peso;
+                usuario.altura = this.state.altura;
                 let res = true;
-                AsyncStorage.setItem(Util.USUARIO, usuario).catch((error) => {
+                AsyncStorage.setItem(Util.USUARIO, JSON.stringify(usuario)).catch((error) => {
                     res = false;
                 });
                 if (res) {
@@ -73,7 +77,9 @@ export default class TelaDadosPessoais extends React.Component {
                             NavigationActions.navigate(
                                 {
                                     routeName: 'Alimentacao',
-                                    params: {nome: usuario['nome']}
+                                    params: {
+                                        nome: usuario.nome
+                                    }
                                 }
                             )
                         ],
@@ -101,7 +107,7 @@ export default class TelaDadosPessoais extends React.Component {
             this.setState({altura: usuario.altura});
         }
     }
-    componentDidMount() {
+    componentWillMount() {
         this.carregarForm();
     }
 
@@ -140,20 +146,21 @@ export default class TelaDadosPessoais extends React.Component {
                         }}
                         onDateChange={(date) => {this.setState({nascimento: date})}} />
                     <FormLabel labelStyle={styles.form_label}> Altura: </FormLabel>
-                    <FormInput 
+                    <FormInput
                             style={styles.form_input}
                             autoCapitalize="none"
                             placeholder="Inserir sua altura"
-                            keyboardType='numeric'
-                            onEndEditing={(altura) => this.setState({altura})}
-                        on/>
+                            keyboardType='numbers-and-punctuation'
+                            onChangeText={(altura) => this.setState({altura})}
+                            defaultValue={this.state.altura}/>
                     <FormLabel labelStyle={styles.form_label}>Peso:</FormLabel>
                     <FormInput
                         style={styles.form_input}
                         autoCapitalize="none"
                         placeholder="Inserir seu peso"
                         keyboardType='numeric'
-                        onEndEditing={(peso) => this.setState({peso})}/>
+                        onChangeText={(peso) => this.setState({peso})}
+                        defaultValue={this.state.peso}/>
                     <Button
                         title = {params.primeiraVez ? 'Prosseguir' : 'Salvar dados'}
                         buttonStyle={styles.button}

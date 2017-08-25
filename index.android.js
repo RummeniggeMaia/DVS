@@ -8,8 +8,10 @@ import {
 import TelaLogin from './src/telas/login/TelaLogin';
 import TelaRegistro from './src/telas/login/TelaRegistro';
 import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
+import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
 import TelaDadosPessoais from './src/telas/login/TelaDadosPessoais';
-import { MenuContext } from 'react-native-popup-menu';
+import TelaDadosConta from './src/telas/login/TelaDadosDaConta';
+import { MenuContext } from 'react-native-menu';
 import MenuTopo from './src/components/MenuTopo';
 
 
@@ -25,6 +27,12 @@ const DietaViverSaudavel = StackNavigator({
     },
     DadosPessoais: {
         screen: TelaDadosPessoais
+    },
+    DadosConta: {
+        screen: TelaDadosConta
+    },
+    RecuperarSenha: {
+        screen: TelaRecuperarSenha
     },
 }, {
     navigationOptions: {

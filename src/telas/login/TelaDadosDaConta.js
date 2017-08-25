@@ -1,60 +1,138 @@
 import React from 'react';
-import { ScrollView, View, StatusBar } from 'react-native';
 import {
-  FormLabel,
-  FormInput,
-  Button,
-  Icon,
-  Text
+    ScrollView,
+    View,
+    StatusBar,
+    Alert,
+    AsyncStorage,
+} from 'react-native';
+import {
+    FormLabel,
+    FormInput,
+    Button,
+    Icon,
+    Text,
 } from 'react-native-elements';
-import styles from 'DietaViverSaudavel/src/styles/Boxes_style.js';
+import DatePicker from 'react-native-datepicker';
+import { NavigationActions } from 'react-navigation';
 
-export default class TelaDadosDaConta extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { textNome: 'Insira o seu nome.',
-                   textEmail: 'Insira o seu e-mail.'
-                 };
-  }
-    static navigationOptions = {
-        title: 'Dados da Conta',
-    };
+import styles from 'DietaViverSaudavel/src/styles/Styles.js';
+import Util from 'DietaViverSaudavel/src/util/Util.js';
+import MenuTopo from 'DietaViverSaudavel/src/components/MenuTopo';
+
+export default class TelaDadosPessoais extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nome: "",
+            email: "",
+            carregou: true,
+        };
+    }
+
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: `Dados da conta`,
+            headerRight: <MenuTopo navigation={navigation}/>
+        }
+    }
+
+    async salvarDadosConta() {
+        this.setState({carregou: false});
+        let usuario = await AsyncStorage.getItem(Util.USUARIO);
+        if (usuario != null) {
+            usuario = JSON.parse(usuario);
+        }
+        await fetch(Util.SERVIDOR_URL, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login: usuario.email,
+                senha: usuario.senha,
+                email: this.state.email,
+                nome: this.state.nome,
+                func: "salvar_dados_conta"
+            })
+        }).then((response) => response.json())
+        .then((responseJson) =>{
+            if (responseJson.resp.status == "ok") {
+                usuario.nome = this.state.nome;
+                usuario.email = this.state.email;
+                let res = true;
+                AsyncStorage.setItem(Util.USUARIO, JSON.stringify(usuario)).catch((error) => {
+                    res = false;
+                });
+                if (res) {
+                    const resetAction = NavigationActions.reset({
+                        index: 0,
+                        actions: [
+                            NavigationActions.navigate({
+                                routeName: 'Alimentacao',
+                                params:{nome: usuario.nome}
+                            })
+                        ],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+                } else {
+                    Alert.alert("Erro", "Não pode salvar dados da conta.");
+                }
+            } else if (responseJson.resp.status == "err_2") {
+                Alert.alert("Erro", "Sessão expirada.");
+            }
+        }).catch((error) => {
+            Alert.alert("Falha no registro", "Falha no servidor.");
+        }).done(() => {
+            this.setState({carregou: true});
+        });
+    }
+
+    async carregarForm() {
+        let usuario = await AsyncStorage.getItem(Util.USUARIO);
+        if (usuario != null) {
+            usuario = JSON.parse(usuario);
+            this.setState({nome: usuario.nome});
+            this.setState({email: usuario.email});
+        }
+    }
+    componentWillMount() {
+        this.carregarForm();
+    }
+
     render() {
         return (
-          <ScrollView
-              style = {{backgroundColor: '#D5FFD5'}}
-              showsVerticalScrollIndicator = {true}>
+            <ScrollView
+                style = {styles.scrollview}
+                showsVerticalScrollIndicator = {true}>
 
-              <StatusBar backgroundColor="#00A043" barStyle="light-content" />
-
-                  <View>
-
-                  <FormLabel>
-                    Nome:
-                  </FormLabel>
-                  <FormInput
-                          style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                          autoCapitalize="none"
-                          placeholder={this.state.textNome}
-                        />
-                  <FormLabel>
-                    E-mail:
-                  </FormLabel>
-                  <FormInput
-                          style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-                          autoCapitalize="none"
-                          placeholder={this.state.textEmail}
-                        />
-                  <Button
-                      onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                      title = "Salvar Dados"
-                      backgroundColor = "#5497FF"/ >
-                  <View style={styles.line}></View>
-                  <Button
-                      onPress = { () => this.props.navigation.navigate('Alimentacao') }
-                      title = "Mudar Senha"
-                      backgroundColor = "#5497FF"/>
-            </View>
+                <View>
+                    <FormLabel labelStyle={styles.form_label}> E-mail: </FormLabel>
+                    <FormInput
+                            style={styles.form_input}
+                            autoCapitalize="none"
+                            editable={false}
+                            placeholder="Inserir sua altura"
+                            keyboardType='email-address'
+                            defaultValue={this.state.email}/>
+                    <FormLabel labelStyle={styles.form_label}> Nome: </FormLabel>
+                    <FormInput
+                            style={styles.form_input}
+                            autoCapitalize='words'
+                            placeholder="Inserir nome"
+                            onChangeText={(nome) => this.setState({nome})}
+                            defaultValue={this.state.nome}/>
+                    <Button
+                            title='Salvar dados'
+                            buttonStyle={styles.button}
+                            onPress = {() => this.salvarDadosConta()} />
+                    <Button
+                        title = 'Alterar senha'
+                        buttonStyle={styles.button}
+                        onPress = {() => this.props.navigation.navigate('AlterarSenha')} />
+                </View>
             </ScrollView>
         );
     }
