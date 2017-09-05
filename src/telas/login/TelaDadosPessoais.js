@@ -41,10 +41,13 @@ export default class TelaDadosPessoais extends React.Component {
     }
 
     async salvarDadosPessoais() {
+        let navegou = false;
         this.setState({carregou: false});
         let usuario = await AsyncStorage.getItem(Util.USUARIO);
         if (usuario != null) {
             usuario = JSON.parse(usuario);
+        } else {
+            throw "Usuario nulo.";
         }
         await fetch(Util.SERVIDOR_URL, {
             method: 'POST',
@@ -53,11 +56,12 @@ export default class TelaDadosPessoais extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                login: usuario.email,
+                email: usuario.email,
                 senha: usuario.senha,
                 nascimento: this.state.nascimento,
                 peso: this.state.peso,
                 altura: this.state.altura,
+                facebook_id: usuario.facebook_id,
                 func: "salvar_dados_pessoais"
             })
         }).then((response) => response.json())
@@ -85,6 +89,7 @@ export default class TelaDadosPessoais extends React.Component {
                         ],
                     });
                     this.props.navigation.dispatch(resetAction);
+                    navegou = true;
                 } else {
                     Alert.alert("Erro", "Não pode salvar dados.");
                 }
@@ -94,7 +99,8 @@ export default class TelaDadosPessoais extends React.Component {
         }).catch((error) => {
             Alert.alert("Falha no registro", "Falha no servidor.");
         }).done(() => {
-            this.setState({carregou: true});
+            if (!navegou)
+                this.setState({carregou: true});
         });
     }
 
@@ -107,7 +113,7 @@ export default class TelaDadosPessoais extends React.Component {
             this.setState({altura: usuario.altura});
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         this.carregarForm();
     }
 
@@ -150,7 +156,7 @@ export default class TelaDadosPessoais extends React.Component {
                             style={styles.form_input}
                             autoCapitalize="none"
                             placeholder="Inserir sua altura"
-                            keyboardType='numbers-and-punctuation'
+                            keyboardType='numeric'
                             onChangeText={(altura) => this.setState({altura})}
                             defaultValue={this.state.altura}/>
                     <FormLabel labelStyle={styles.form_label}>Peso:</FormLabel>

@@ -11,6 +11,7 @@ import TelaAlimentacao from './src/telas/diarias/TelaAlimentacao';
 import TelaRecuperarSenha from './src/telas/login/TelaRecuperarSenha';
 import TelaDadosPessoais from './src/telas/login/TelaDadosPessoais';
 import TelaDadosConta from './src/telas/login/TelaDadosDaConta';
+import TelaAlterarSenha from './src/telas/login/TelaAlterarSenha';
 import { MenuContext } from 'react-native-menu';
 import MenuTopo from './src/components/MenuTopo';
 
@@ -34,6 +35,9 @@ const DietaViverSaudavel = StackNavigator({
     RecuperarSenha: {
         screen: TelaRecuperarSenha
     },
+    AlterarSenha: {
+        screen: TelaAlterarSenha
+    }
 }, {
     navigationOptions: {
         headerTintColor: 'white',

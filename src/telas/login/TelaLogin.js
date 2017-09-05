@@ -37,22 +37,26 @@ export default class TelaLogin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            nome: "",
             email: "",
             senha: "",
+            facebook_id: "",
+            sexo: "",
             carregou: true,
         };
     }
 
     static navigationOptions = {
-        title: 'Login',
+        title: 'Dieta Viver Saudável',
     };
 
     async logar(autoLogin = false) {
-        if (!this.state.email || !this.state.senha) {
-            return;
-        }
+        let navegou = false;
         let senha = this.state.senha;
         if (!autoLogin) {
+            if (!this.state.email || !this.state.senha) {
+                return;
+            }
             senha = hash.sha256().update(senha).digest('hex');
         }
         this.setState({carregou: false});
@@ -65,6 +69,7 @@ export default class TelaLogin extends React.Component {
             body: JSON.stringify({
                 email: this.state.email,
                 senha: senha,
+                facecbook_id: this.state.facecbook_id,
                 func: "logar"
             })
         }).then((response) => response.json())
@@ -77,6 +82,8 @@ export default class TelaLogin extends React.Component {
                     nascimento: responseJson.resp.user.nascimento,
                     peso: responseJson.resp.user.peso,
                     altura: responseJson.resp.user.altura,
+                    facebook_id: this.state.facebook_id,
+                    sexo: responseJson.resp.user.sexo,
                 });
                 let res = true;
                 AsyncStorage.setItem(Util.USUARIO, usuario).catch((error) => {
@@ -93,6 +100,7 @@ export default class TelaLogin extends React.Component {
                         ]
                     });
                     this.props.navigation.dispatch(resetAction);
+                    navegou = true;
                 } else {
                     Alert.alert("Falha durante login", "Não pode salvar dados.");
                 }
@@ -102,18 +110,104 @@ export default class TelaLogin extends React.Component {
         }).catch((error) => {
             Alert.alert("Falha durante login", "Login não pode ser realizado.");
         }).done(() => {
-            if (this.isMounted)
+            if (!navegou)
                 this.setState({carregou: true});
+        });
+    }
+
+    async salvarDadosFacebook(result) {
+        if (!result['verified']) {
+            Alert.alert('Conta de Facebook não verificada!');
+            return;
+        }
+        this.setState({facebook_id: result['id']});
+        this.setState({nome: result['name']});
+        this.setState({email: result['email']});
+        if (result['gender'] == 'male') {
+            this.setState({sexo: 'M'});
+        } else if (result['gender'] == 'female') {
+            this.setState({sexo: 'F'});
+        } else {
+            this.setState({sexo: 'I'});
+        }
+        this.setState({carregou: false});
+        await fetch(Util.SERVIDOR_URL, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nome: this.state.nome,
+                email: this.state.email,
+                facebook_id: this.state.facebook_id,
+                sexo: this.state.sexo,
+                func: "verficiar_facebook"
+            })
+        }).then((response) => response.json())
+        .then((responseJson) => {
+            let routeName, params;
+            if (responseJson.resp.status == "ok") {
+                routeName = "Alimentacao";
+                params = {nome: this.state.nome};
+            } else if (responseJson.resp.status == "ok_2") {
+                routeName = "DadosPessoais";
+                params = {primeiraVez: true};
+            } else {
+                throw responseJson.resp.status;
+            }
+            let usuario = JSON.stringify({
+                nome: this.state.nome,
+                email: this.state.email,
+                facebook_id: this.state.facebook_id,
+                sexo: this.state.sexo,
+            });
+            let res = true;
+            AsyncStorage.setItem(Util.USUARIO, usuario).catch((error) => {
+                res = false;
+            });
+            if (res) {
+                const resetAction = NavigationActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: routeName,
+                            params: params,
+                        })
+                    ]
+                });
+                this.props.navigation.dispatch(resetAction);
+            } else {
+                throw "Não pode salvar dados.";
+            }
+        }).catch((error) => {
+            Alert.alert("Falha durante login facebook", "Login não pode ser realizado.");
+            //LoginManager.getInstance().logout(() => {Alert.alert('Saindo do Facebook')});
+            LoginManager.logOut();
+            this.setState({carregou: true});
         });
     }
 
     async verificarUsuario() {
         let usuario = await AsyncStorage.getItem(Util.USUARIO);
+        usuario = JSON.parse(usuario);
         if (usuario != null) {
-            usuario = JSON.parse(usuario);
-            this.state.email = usuario['email'];
-            this.state.senha = usuario['senha'];
-            this.logar(true);
+            if (usuario.facebook_id) {
+                const resetAction = NavigationActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: 'Alimentacao',
+                            params:{nome: usuario.nome}
+                        })
+                    ]
+                });
+                this.props.navigation.dispatch(resetAction);
+            } else {
+                this.state.email = usuario['email'];
+                this.state.senha = usuario['senha'];
+                this.logar(true);
+            }
         }
     }
 
@@ -122,40 +216,20 @@ export default class TelaLogin extends React.Component {
         this.verificarUsuario();
     }
 
-    componentWillUnmount() {
-        this.setState({carregou: true});
-    }
-
-    async saveInfo(result){
-        console.log("result");
-        AsyncStorage.setItem('first_name', result['first_name']);
-        AsyncStorage.setItem('last_name', result['last_name']);
-        try{
-            let a = await AsyncStorage.getItem('first_name');
-            console.log(a)
-
-            const navigateAction = NavigationActions.navigate({
-                routeName: 'Alimentacao',
-                params: {},
-                action: NavigationActions.navigate({ routeName: 'Alimentacao'})
-            })
-
-            this.props.navigation.dispatch(navigateAction)
-            console.log("dps do navigator")
-        }catch(erro){
-        }
-    }
+    // componentWillUnmount() {
+    //     this.setState({carregou: true});
+    // }
 
     getAllInfo(result) {
-        AsyncStorage.getAllKeys((err, keys) => {
-            AsyncStorage.multiGet(keys, (err, stores) => {
-                stores.map((result, i, store) => {
-                    // get at each store's key/value so you can work with it
-                    let key = store[i][0];
-                    let value = store[i][1];
-                });
-            });
-        });
+        // AsyncStorage.getAllKeys((err, keys) => {
+        //     AsyncStorage.multiGet(keys, (err, stores) => {
+        //         stores.map((result, i, store) => {
+        //             // get at each store's key/value so you can work with it
+        //             let key = store[i][0];
+        //             let value = store[i][1];
+        //         });
+        //     });
+        // });
     }
     render() {
         if (!this.state.carregou) {
@@ -198,27 +272,25 @@ export default class TelaLogin extends React.Component {
                         onLoginFinished={
                             (error, result) => {
                                 if (error) {
-                                    alert("login has error: " + result.error);
+                                    alert("Erro durante o login: ");
                                 } else if (result.isCancelled) {
-                                    alert("login is cancelled.");
+                                    alert("login cancelado.");
                                 } else {
                                     AccessToken.getCurrentAccessToken().then((data) => {
                                         let accessToken = data.accessToken;
-                                        alert(accessToken.toString());
+                                        // alert(accessToken.toString());
                                         const responseInfoCallback = (error, result) => {
                                             if (error) {
-                                                console.log(error)
-                                                alert('Error fetching data: ' + error.toString());
+                                                console.log(error);
+                                                alert('Erro ao buscar dados ' + error.toString());
                                             } else {
-                                                console.log(result)
-                                                console.log(result['first_name'])
+                                                console.log(result);
+                                                console.log(result['first_name']);
                                                 try {
-                                                  console.log("Aqui!")
-                                                  this.saveInfo(result);
+                                                    this.salvarDadosFacebook(result);
                                                 } catch (error) {
-                                                // Error saving data
+                                                    console.log('Erro ao salvar dados de login do Facebook.');
                                                 }
-                                                alert('Success fetching data: ' + result.toString());
                                             }
                                         }
                                         const infoRequest = new GraphRequest(
@@ -226,7 +298,7 @@ export default class TelaLogin extends React.Component {
                                                 accessToken: accessToken,
                                                 parameters: {
                                                     fields: {
-                                                        string: 'email,name,first_name,middle_name,last_name'
+                                                        string: 'id, email, name, gender, verified'
                                                     }
                                                 }
                                             },

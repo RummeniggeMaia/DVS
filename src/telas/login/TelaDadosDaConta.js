@@ -39,6 +39,7 @@ export default class TelaDadosPessoais extends React.Component {
     }
 
     async salvarDadosConta() {
+        let navegou = false;
         this.setState({carregou: false});
         let usuario = await AsyncStorage.getItem(Util.USUARIO);
         if (usuario != null) {
@@ -51,10 +52,9 @@ export default class TelaDadosPessoais extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                login: usuario.email,
-                senha: usuario.senha,
                 email: this.state.email,
                 nome: this.state.nome,
+                facebook_id: usuario.facebook_id,
                 func: "salvar_dados_conta"
             })
         }).then((response) => response.json())
@@ -77,6 +77,7 @@ export default class TelaDadosPessoais extends React.Component {
                         ],
                     });
                     this.props.navigation.dispatch(resetAction);
+                    let navegou = true;
                 } else {
                     Alert.alert("Erro", "Não pode salvar dados da conta.");
                 }
@@ -86,7 +87,8 @@ export default class TelaDadosPessoais extends React.Component {
         }).catch((error) => {
             Alert.alert("Falha no registro", "Falha no servidor.");
         }).done(() => {
-            this.setState({carregou: true});
+            if (!navegou)
+                this.setState({carregou: true});
         });
     }
 
@@ -98,7 +100,7 @@ export default class TelaDadosPessoais extends React.Component {
             this.setState({email: usuario.email});
         }
     }
-    componentWillMount() {
+    componentDidMount() {
         this.carregarForm();
     }
 
@@ -113,9 +115,10 @@ export default class TelaDadosPessoais extends React.Component {
                     <FormInput
                             style={styles.form_input}
                             autoCapitalize="none"
-                            editable={false}
-                            placeholder="Inserir sua altura"
+                            editable={true}
+                            placeholder="Inserir e-mail"
                             keyboardType='email-address'
+                            onChangeText={(email) => this.setState({email})}
                             defaultValue={this.state.email}/>
                     <FormLabel labelStyle={styles.form_label}> Nome: </FormLabel>
                     <FormInput

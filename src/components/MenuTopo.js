@@ -10,6 +10,9 @@ import Menu,{
     MenuOption,
     MenuTrigger
 } from 'react-native-menu';
+import FBSDK, {
+    LoginManager
+} from 'react-native-fbsdk';
 
 import {
     Icon,
@@ -32,6 +35,7 @@ export default class MenuTopo extends React.Component {
 
     async sair() {
         await AsyncStorage.removeItem(Util.USUARIO);
+        LoginManager.logOut();
         this.props.navigation.dispatch(NavigationActions.reset({
             index: 0,
             actions: [
