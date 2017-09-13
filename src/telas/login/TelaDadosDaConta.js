@@ -39,13 +39,16 @@ export default class TelaDadosPessoais extends React.Component {
     }
 
     async salvarDadosConta() {
+        if (!this.validar()) {
+            return;
+        }
         let navegou = false;
         this.setState({carregou: false});
         let usuario = await AsyncStorage.getItem(Util.USUARIO);
         if (usuario != null) {
             usuario = JSON.parse(usuario);
         }
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -102,6 +105,24 @@ export default class TelaDadosPessoais extends React.Component {
     }
     componentDidMount() {
         this.carregarForm();
+    }
+
+    validar() {
+        if (this.state.nome === "") {
+            Alert.alert("Falha no registro!", "Insira um nome.");
+            return false;
+        } else if (this.state.nome.length < 4) {
+            Alert.alert("Falha no registro!", "Nome muito curto.");
+            return false;
+        }
+        if (this.state.email === "") {
+            Alert.alert("Falha no registro!", "Insira um email.");
+            return false;
+        } else if (!this.state.email.match("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$")) {
+            Alert.alert("Falha no registro!", "E-mail inválido.");
+            return false;
+        }
+        return true;
     }
 
     render() {

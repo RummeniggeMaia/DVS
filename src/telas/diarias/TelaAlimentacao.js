@@ -20,25 +20,6 @@ export default class TelaAlimentacao extends React.Component {
         }
     }
 
-    // async verificarUsuario() {
-    //     let usuario = await AsyncStorage.getItem(Util.USUARIO);
-    //     if (usuario == null) {
-    //         const resetAction = NavigationActions.reset({
-    //             index: 0,
-    //             actions: [
-    //                 NavigationActions.navigate({ routeName: 'Login'})
-    //             ]
-    //         });
-    //         this.props.navigation.dispatch(resetAction);
-    //     } else {
-    //
-    //     }
-    // }
-    //
-    // componentDidMount() {
-    //     this.verificarUsuario();
-    // }
-
     render() {
         return (
             <ScrollView

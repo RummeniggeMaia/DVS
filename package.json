@@ -17,10 +17,12 @@
     "react-native-fbsdkcore": "0.0.8",
     "react-native-fbsdklogin": "0.0.8",
     "react-native-fontawesome": "^5.7.0",
-    "react-native-masked-text": "^1.5.3",
+    "react-native-masked-input": "^1.0.3",
+    "react-native-masked-text": "^1.6.2",
     "react-native-menu": "^0.21.0",
     "react-native-popup-menu": "^0.8.0",
     "react-native-sha256": "^1.0.1",
+    "react-native-text-input-mask": "^0.3.2",
     "react-native-ui-xg": "0.0.6",
     "react-native-vector-icons": "^4.3.0",
     "react-navigation": "^1.0.0-beta.11"

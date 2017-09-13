@@ -48,7 +48,7 @@ export default class TelaAlterarSenha extends React.Component {
         this.setState({carregou: false});
         let senhaAtual = hash.sha256().update(this.state.senhaAtual).digest('hex');
         let novaSenha = hash.sha256().update(this.state.novaSenha).digest('hex');
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -101,6 +101,9 @@ export default class TelaAlterarSenha extends React.Component {
             return false;
         } else if (this.state.novaSenha !== this.state.confirmarSenha) {
             Alert.alert("Falha ao alterar senha!", "Senhas não coincidem.");
+            return false;
+        } else if (this.state.novaSenha.length < 4) {
+            Alert.alert("Falha ao alterar senha!", "Senha muito curta!");
             return false;
         }
         return true;

@@ -5,6 +5,7 @@ import {
     StatusBar,
     Alert,
     AsyncStorage,
+    TextInput,
 } from 'react-native';
 import {
     FormLabel,
@@ -27,8 +28,8 @@ export default class TelaDadosPessoais extends React.Component {
         super(props);
         this.state = {
             nascimento: "01/01/1990",
-            peso: "",
-            altura: "",
+            peso: "0",
+            altura: "0",
             carregou: true,
         };
     }
@@ -41,6 +42,9 @@ export default class TelaDadosPessoais extends React.Component {
     }
 
     async salvarDadosPessoais() {
+        if (!this.validar()) {
+            return;
+        }
         let navegou = false;
         this.setState({carregou: false});
         let usuario = await AsyncStorage.getItem(Util.USUARIO);
@@ -49,7 +53,7 @@ export default class TelaDadosPessoais extends React.Component {
         } else {
             throw "Usuario nulo.";
         }
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -94,7 +98,7 @@ export default class TelaDadosPessoais extends React.Component {
                     Alert.alert("Erro", "Não pode salvar dados.");
                 }
             } else if (responseJson.resp.status == "err_2") {
-                Alert.alert("Erro", "Sessão expirada.");
+                Alert.alert("Erro", "Dados inváldos.");
             }
         }).catch((error) => {
             Alert.alert("Falha no registro", "Falha no servidor.");
@@ -115,6 +119,27 @@ export default class TelaDadosPessoais extends React.Component {
     }
     componentDidMount() {
         this.carregarForm();
+    }
+
+    /**
+     * @return {Boolean} retorna a validação do peso e da altura
+     */
+    validar() {
+        if (this.state.peso === "") {
+            Alert.alert("Falha no registro!", "Insira seu peso.");
+            return false;
+        } else if (isNaN(this.state.peso)) {
+            Alert.alert("Falha no registro!", "Digite apenas números no peso");
+            return false;
+        }
+        if (this.state.altura === "") {
+            Alert.alert("Falha no registro!", "Insira sua altura.");
+            return false;
+        } else if (isNaN(this.state.altura)) {
+            Alert.alert("Falha no registro!", "Digite apenas números na altura");
+            return false;
+        }
+        return true;
     }
 
     render() {
@@ -156,7 +181,6 @@ export default class TelaDadosPessoais extends React.Component {
                             style={styles.form_input}
                             autoCapitalize="none"
                             placeholder="Inserir sua altura"
-                            keyboardType='numeric'
                             onChangeText={(altura) => this.setState({altura})}
                             defaultValue={this.state.altura}/>
                     <FormLabel labelStyle={styles.form_label}>Peso:</FormLabel>
@@ -164,7 +188,7 @@ export default class TelaDadosPessoais extends React.Component {
                         style={styles.form_input}
                         autoCapitalize="none"
                         placeholder="Inserir seu peso"
-                        keyboardType='numeric'
+                        keyboardType='default'
                         onChangeText={(peso) => this.setState({peso})}
                         defaultValue={this.state.peso}/>
                     <Button

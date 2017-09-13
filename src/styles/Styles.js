@@ -7,7 +7,7 @@ export default StyleSheet.create({
     },
     text_link: {
         color:'blue',
-        fontSize: 12,
+        fontSize: 14,
         paddingLeft:10
     },
     logo: {
@@ -17,6 +17,12 @@ export default StyleSheet.create({
     form_input: {
         flex: 1,
         height: 40,
+    },
+    form_input_mask: {
+        flex: 1,
+        height: 40,
+        marginLeft: 10,
+        marginRight: 10,
     },
     indicator: {
         flex: 1,

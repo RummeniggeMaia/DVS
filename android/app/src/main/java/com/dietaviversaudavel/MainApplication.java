@@ -59,7 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
     AppEventsLogger.activateApp(this);
     try {
     PackageInfo info = getPackageManager().getPackageInfo(
-                "com.dietaviversaudavel", 
+                "com.dietaviversaudavel",
                 PackageManager.GET_SIGNATURES);
     for (Signature signature : info.signatures) {
         MessageDigest md = MessageDigest.getInstance("SHA");

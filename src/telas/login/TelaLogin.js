@@ -51,16 +51,16 @@ export default class TelaLogin extends React.Component {
     };
 
     async logar(autoLogin = false) {
+        if (!this.validar()) {
+            return;
+        }
         let navegou = false;
         let senha = this.state.senha;
         if (!autoLogin) {
-            if (!this.state.email || !this.state.senha) {
-                return;
-            }
             senha = hash.sha256().update(senha).digest('hex');
         }
         this.setState({carregou: false});
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -108,7 +108,7 @@ export default class TelaLogin extends React.Component {
                 Alert.alert("Falha durante login", "Credenciais inválidas.");
             }
         }).catch((error) => {
-            Alert.alert("Falha durante login", "Login não pode ser realizado.");
+            Alert.alert("Falha durante login", "Problemas no servidor.");
         }).done(() => {
             if (!navegou)
                 this.setState({carregou: true});
@@ -131,7 +131,7 @@ export default class TelaLogin extends React.Component {
             this.setState({sexo: 'I'});
         }
         this.setState({carregou: false});
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -211,25 +211,18 @@ export default class TelaLogin extends React.Component {
         }
     }
 
-    //Verifica se já tem um usuario logado e efetua o login automaticamente.
-    componentDidMount() {
-        this.verificarUsuario();
+    validar() {
+        if (!this.state.email || !this.state.senha) {
+            return false;
+        }
+        if (this.state.email.length < 4 || this.state.senha.length < 4) {
+            return false;
+        }
+        return true;
     }
 
-    // componentWillUnmount() {
-    //     this.setState({carregou: true});
-    // }
-
-    getAllInfo(result) {
-        // AsyncStorage.getAllKeys((err, keys) => {
-        //     AsyncStorage.multiGet(keys, (err, stores) => {
-        //         stores.map((result, i, store) => {
-        //             // get at each store's key/value so you can work with it
-        //             let key = store[i][0];
-        //             let value = store[i][1];
-        //         });
-        //     });
-        // });
+    componentDidMount() {
+        this.verificarUsuario();
     }
     render() {
         if (!this.state.carregou) {

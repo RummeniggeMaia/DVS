@@ -42,7 +42,7 @@ export default class TelaRegistro extends React.Component {
         }
         this.setState({carregou: false});
         let senha = hash.sha256().update(this.state.senha).digest('hex');
-        await fetch(Util.SERVIDOR_URL, {
+        await fetch(Util.SERVIDOR_URL_LOGIN, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -94,9 +94,15 @@ export default class TelaRegistro extends React.Component {
         if (this.state.nome === "") {
             Alert.alert("Falha no registro!", "Insira um nome.");
             return false;
+        } else if (this.state.nome.length < 4) {
+            Alert.alert("Falha no registro!", "Nome muito curto.");
+            return false;
         }
         if (this.state.email === "") {
             Alert.alert("Falha no registro!", "Insira um email.");
+            return false;
+        } else if (!this.state.email.match("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$")) {
+            Alert.alert("Falha no registro!", "E-mail inválido.");
             return false;
         }
         if (this.state.senha === "" || this.state.confirmarSenha === "") {
